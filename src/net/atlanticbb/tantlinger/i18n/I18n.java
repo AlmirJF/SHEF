@@ -39,7 +39,7 @@ public class I18n
     public static Locale locale = Locale.getDefault();
     
     private ResourceBundle bundle;
-    private String _package;
+    private final String _package;
     
     private I18n(String _package)
     {
