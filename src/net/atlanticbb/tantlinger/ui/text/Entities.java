@@ -452,17 +452,20 @@ public class Entities
 
         private IntHashMap mapValueToName = new IntHashMap();
 
+        @Override
         public void add(String name, int value)
         {
-            mapNameToValue.put(name, new Integer(value));
+            mapNameToValue.put(name, value);
             mapValueToName.put(value, name);
         }
 
+        @Override
         public String name(int value)
         {
             return (String)mapValueToName.get(value);
         }
 
+        @Override
         public int value(String name)
         {
             Object value = mapNameToValue.get(name);
@@ -470,7 +473,7 @@ public class Entities
             {
                 return -1;
             }
-            return ((Integer)value).intValue();
+            return ((Integer)value);
         }
     }
 

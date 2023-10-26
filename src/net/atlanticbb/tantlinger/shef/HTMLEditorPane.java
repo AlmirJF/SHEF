@@ -194,7 +194,7 @@ public class HTMLEditorPane extends JPanel {
         srcPopupMenu = ActionUIFactory.getInstance().createPopupMenu(editActions);
 
         // create file menu
-        JMenu fileMenu = new JMenu(i18n.str("file"));
+        //JMenu fileMenu = new JMenu(i18n.str("file"));
 
         // create edit menu   
         Action act;
@@ -214,6 +214,7 @@ public class HTMLEditorPane extends JPanel {
         editMenu.setText(i18n.str("edit"));
 
         //create format menu
+         
         formatMenu = new JMenu(i18n.str("format"));
         lst = HTMLEditorActionFactory.createFontSizeActionList();//HTMLEditorActionFactory.createInlineActionList();
         actionList.addAll(lst);

@@ -1,4 +1,3 @@
-
 package net.atlanticbb.tantlinger.shef;
 
 import java.io.IOException;
@@ -18,16 +17,14 @@ public class Demo {
 
     private final JFrame frame;
     private final HTMLEditorPane editor;
-    
-    public Demo() {
-        
 
+    public Demo() {
 
         editor = new HTMLEditorPane(true);
         InputStream in = Demo.class.getResourceAsStream("/net/atlanticbb/tantlinger/shef/htmlsnip.txt");
-        try{
+        try {
             editor.setText(IOUtils.read(in));
-        }catch(IOException ex) {
+        } catch (IOException ex) {
             ex.printStackTrace();
         } finally {
             IOUtils.close(in);
@@ -45,39 +42,36 @@ public class Demo {
         frame.setSize(800, 600);
         frame.getContentPane().add(editor);
         frame.setVisible(true);
-        
+
     }
 
     private void printHtml() {
         System.out.println(editor.getText());
     }
-    
-    
+
     private static Demo demo;
-    
+
     public static void main(String args[]) throws InterruptedException, InvocationTargetException {
 
         try {
             UIManager.setLookAndFeel(
-                UIManager.getSystemLookAndFeelClassName());
-        } catch(Exception ex){}
+                    UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception ex) {
+        }
 
         SwingUtilities.invokeAndWait(new Runnable() {
 
             public void run() {
-               demo = new Demo();
+                demo = new Demo();
             }
         });
-        
+
         do {
             Thread.sleep(2000);
-            
+
         } while (demo.frame.isVisible());
-        
+
         demo.printHtml();
-        
+
     }
-
-    
-
 }
