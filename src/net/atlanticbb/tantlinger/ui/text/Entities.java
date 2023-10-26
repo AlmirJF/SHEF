@@ -19,27 +19,34 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-
 /**
  * <p>
  * Provides HTML and XML entity utilities.
  * </p>
  * <p>
- * This class comes from the jakarta project's commons-lang package. It was made public
+ * This class comes from the jakarta project's commons-lang package. It was made
+ * public
  * and method unescapeUnknownEntities was added.
  * </p>
- * @see <a href="http://hotwired.lycos.com/webmonkey/reference/special_characters/">ISO Entities</a>
- * @see </br><a href="http://www.w3.org/TR/REC-html32#latin1">HTML 3.2 Character Entities for ISO Latin-1</a>
- * @see </br><a href="http://www.w3.org/TR/REC-html40/sgml/entities.html">HTML 4.0 Character entity references</a>
- * @see </br><a href="http://www.w3.org/TR/html401/charset.html#h-5.3">HTML 4.01 Character References</a>
- * @see </br><a href="http://www.w3.org/TR/html401/charset.html#code-position">HTML 4.01 Code positions</a>
+ *
+ * @see
+ * <a href="http://hotwired.lycos.com/webmonkey/reference/special_characters/">ISO
+ * Entities</a>
+ * @see </br><a href="http://www.w3.org/TR/REC-html32#latin1">HTML 3.2 Character
+ * Entities for ISO Latin-1</a>
+ * @see </br><a href="http://www.w3.org/TR/REC-html40/sgml/entities.html">HTML
+ * 4.0 Character entity references</a>
+ * @see </br><a href="http://www.w3.org/TR/html401/charset.html#h-5.3">HTML 4.01
+ * Character References</a>
+ * @see
+ * </br><a href="http://www.w3.org/TR/html401/charset.html#code-position">HTML
+ * 4.01 Code positions</a>
  * @author <a href="mailto:alex@purpletech.com">Alexander Day Chaffee</a>
  * @author <a href="mailto:ggregory@seagullsw.com">Gary Gregory</a>
  * @since 2.0
  * @version $Id: Entities.java,v 1.1 2007/11/20 13:49:17 cvsbob Exp $
  */
-public class Entities
-{
+public class Entities {
 
     private static final String[][] BASIC_ARRAY = {
         {"quot", "34"}, // " - double-quote
@@ -47,178 +54,178 @@ public class Entities
         {"lt", "60"}, // < - less-than
         {"gt", "62"}, // > - greater-than
     };
-    
-    private static final String[][] SPECIAL_CHARS =
-    {
-        {"nbsp", "160"}, // non-breaking space
-        {"iexcl", "161"}, // inverted exclamation mark
-        {"cent", "162"}, // cent sign
-        {"pound", "163"}, // pound sign
-        {"curren", "164"}, // currency sign
-        {"yen", "165"}, // yen sign = yuan sign
-        {"brvbar", "166"}, // broken bar = broken vertical bar
-        {"sect", "167"}, // section sign
-        {"uml", "168"}, // diaeresis = spacing diaeresis
-        {"copy", "169"}, // - copyright sign
-        {"ordf", "170"}, // feminine ordinal indicator
-        {"laquo", "171"}, // left-pointing double angle quotation mark = left pointing guillemet
-        {"not", "172"}, // not sign
-        {"shy", "173"}, // soft hyphen = discretionary hyphen
-        {"reg", "174"}, // - registered trademark sign
-        {"macr", "175"}, // macron = spacing macron = overline = APL overbar
-        {"deg", "176"}, // degree sign
-        {"plusmn", "177"}, // plus-minus sign = plus-or-minus sign
-        {"sup2", "178"}, // superscript two = superscript digit two = squared
-        {"sup3", "179"}, // superscript three = superscript digit three = cubed
-        {"acute", "180"}, // acute accent = spacing acute
-        {"micro", "181"}, // micro sign
-        {"para", "182"}, // pilcrow sign = paragraph sign
-        {"middot", "183"}, // middle dot = Georgian comma = Greek middle dot
-        {"cedil", "184"}, // cedilla = spacing cedilla
-        {"sup1", "185"}, // superscript one = superscript digit one
-        {"ordm", "186"}, // masculine ordinal indicator
-        {"raquo", "187"}, // right-pointing double angle quotation mark = right pointing guillemet
-    };
+
+    private static final String[][] SPECIAL_CHARS
+            = {
+                {"nbsp", "160"}, // non-breaking space
+                {"iexcl", "161"}, // inverted exclamation mark
+                {"cent", "162"}, // cent sign
+                {"pound", "163"}, // pound sign
+                {"curren", "164"}, // currency sign
+                {"yen", "165"}, // yen sign = yuan sign
+                {"brvbar", "166"}, // broken bar = broken vertical bar
+                {"sect", "167"}, // section sign
+                {"uml", "168"}, // diaeresis = spacing diaeresis
+                {"copy", "169"}, // - copyright sign
+                {"ordf", "170"}, // feminine ordinal indicator
+                {"laquo", "171"}, // left-pointing double angle quotation mark = left pointing guillemet
+                {"not", "172"}, // not sign
+                {"shy", "173"}, // soft hyphen = discretionary hyphen
+                {"reg", "174"}, // - registered trademark sign
+                {"macr", "175"}, // macron = spacing macron = overline = APL overbar
+                {"deg", "176"}, // degree sign
+                {"plusmn", "177"}, // plus-minus sign = plus-or-minus sign
+                {"sup2", "178"}, // superscript two = superscript digit two = squared
+                {"sup3", "179"}, // superscript three = superscript digit three = cubed
+                {"acute", "180"}, // acute accent = spacing acute
+                {"micro", "181"}, // micro sign
+                {"para", "182"}, // pilcrow sign = paragraph sign
+                {"middot", "183"}, // middle dot = Georgian comma = Greek middle dot
+                {"cedil", "184"}, // cedilla = spacing cedilla
+                {"sup1", "185"}, // superscript one = superscript digit one
+                {"ordm", "186"}, // masculine ordinal indicator
+                {"raquo", "187"}, // right-pointing double angle quotation mark = right pointing guillemet
+            };
 
     private static final String[][] APOS_ARRAY = {
         {"apos", "39"}, // XML apostrophe
     };
 
     // package scoped for testing
-    static final String[][] ISO8859_1_ARRAY = 
-    {
-        {"frac14", "188"}, // vulgar fraction one quarter = fraction one quarter
-        {"frac12", "189"}, // vulgar fraction one half = fraction one half
-        {"frac34", "190"}, // vulgar fraction three quarters = fraction three quarters
-        {"iquest", "191"}, // inverted question mark = turned question mark
-        {"Agrave", "192"}, // - uppercase A, grave accent
-        {"Aacute", "193"}, // - uppercase A, acute accent
-        {"Acirc", "194"}, // - uppercase A, circumflex accent
-        {"Atilde", "195"}, // - uppercase A, tilde
-        {"Auml", "196"}, // - uppercase A, umlaut
-        {"Aring", "197"}, // - uppercase A, ring
-        {"AElig", "198"}, // - uppercase AE
-        {"Ccedil", "199"}, // - uppercase C, cedilla
-        {"Egrave", "200"}, // - uppercase E, grave accent
-        {"Eacute", "201"}, // - uppercase E, acute accent
-        {"Ecirc", "202"}, // - uppercase E, circumflex accent
-        {"Euml", "203"}, // - uppercase E, umlaut
-        {"Igrave", "204"}, // - uppercase I, grave accent
-        {"Iacute", "205"}, // - uppercase I, acute accent
-        {"Icirc", "206"}, // - uppercase I, circumflex accent
-        {"Iuml", "207"}, // - uppercase I, umlaut
-        {"ETH", "208"}, // - uppercase Eth, Icelandic
-        {"Ntilde", "209"}, // - uppercase N, tilde
-        {"Ograve", "210"}, // - uppercase O, grave accent
-        {"Oacute", "211"}, // - uppercase O, acute accent
-        {"Ocirc", "212"}, // - uppercase O, circumflex accent
-        {"Otilde", "213"}, // - uppercase O, tilde
-        {"Ouml", "214"}, // - uppercase O, umlaut
-        {"times", "215"}, // multiplication sign
-        {"Oslash", "216"}, // - uppercase O, slash
-        {"Ugrave", "217"}, // - uppercase U, grave accent
-        {"Uacute", "218"}, // - uppercase U, acute accent
-        {"Ucirc", "219"}, // - uppercase U, circumflex accent
-        {"Uuml", "220"}, // - uppercase U, umlaut
-        {"Yacute", "221"}, // - uppercase Y, acute accent
-        {"THORN", "222"}, // - uppercase THORN, Icelandic
-        {"szlig", "223"}, // - lowercase sharps, German
-        {"agrave", "224"}, // - lowercase a, grave accent
-        {"aacute", "225"}, // - lowercase a, acute accent
-        {"acirc", "226"}, // - lowercase a, circumflex accent
-        {"atilde", "227"}, // - lowercase a, tilde
-        {"auml", "228"}, // - lowercase a, umlaut
-        {"aring", "229"}, // - lowercase a, ring
-        {"aelig", "230"}, // - lowercase ae
-        {"ccedil", "231"}, // - lowercase c, cedilla
-        {"egrave", "232"}, // - lowercase e, grave accent
-        {"eacute", "233"}, // - lowercase e, acute accent
-        {"ecirc", "234"}, // - lowercase e, circumflex accent
-        {"euml", "235"}, // - lowercase e, umlaut
-        {"igrave", "236"}, // - lowercase i, grave accent
-        {"iacute", "237"}, // - lowercase i, acute accent
-        {"icirc", "238"}, // - lowercase i, circumflex accent
-        {"iuml", "239"}, // - lowercase i, umlaut
-        {"eth", "240"}, // - lowercase eth, Icelandic
-        {"ntilde", "241"}, // - lowercase n, tilde
-        {"ograve", "242"}, // - lowercase o, grave accent
-        {"oacute", "243"}, // - lowercase o, acute accent
-        {"ocirc", "244"}, // - lowercase o, circumflex accent
-        {"otilde", "245"}, // - lowercase o, tilde
-        {"ouml", "246"}, // - lowercase o, umlaut
-        {"divide", "247"}, // division sign
-        {"oslash", "248"}, // - lowercase o, slash
-        {"ugrave", "249"}, // - lowercase u, grave accent
-        {"uacute", "250"}, // - lowercase u, acute accent
-        {"ucirc", "251"}, // - lowercase u, circumflex accent
-        {"uuml", "252"}, // - lowercase u, umlaut
-        {"yacute", "253"}, // - lowercase y, acute accent
-        {"thorn", "254"}, // - lowercase thorn, Icelandic
-        {"yuml", "255"}, // - lowercase y, umlaut
-    };
+    static final String[][] ISO8859_1_ARRAY
+            = {
+                {"frac14", "188"}, // vulgar fraction one quarter = fraction one quarter
+                {"frac12", "189"}, // vulgar fraction one half = fraction one half
+                {"frac34", "190"}, // vulgar fraction three quarters = fraction three quarters
+                {"iquest", "191"}, // inverted question mark = turned question mark
+                {"Agrave", "192"}, // - uppercase A, grave accent
+                {"Aacute", "193"}, // - uppercase A, acute accent
+                {"Acirc", "194"}, // - uppercase A, circumflex accent
+                {"Atilde", "195"}, // - uppercase A, tilde
+                {"Auml", "196"}, // - uppercase A, umlaut
+                {"Aring", "197"}, // - uppercase A, ring
+                {"AElig", "198"}, // - uppercase AE
+                {"Ccedil", "199"}, // - uppercase C, cedilla
+                {"Egrave", "200"}, // - uppercase E, grave accent
+                {"Eacute", "201"}, // - uppercase E, acute accent
+                {"Ecirc", "202"}, // - uppercase E, circumflex accent
+                {"Euml", "203"}, // - uppercase E, umlaut
+                {"Igrave", "204"}, // - uppercase I, grave accent
+                {"Iacute", "205"}, // - uppercase I, acute accent
+                {"Icirc", "206"}, // - uppercase I, circumflex accent
+                {"Iuml", "207"}, // - uppercase I, umlaut
+                {"ETH", "208"}, // - uppercase Eth, Icelandic
+                {"Ntilde", "209"}, // - uppercase N, tilde
+                {"Ograve", "210"}, // - uppercase O, grave accent
+                {"Oacute", "211"}, // - uppercase O, acute accent
+                {"Ocirc", "212"}, // - uppercase O, circumflex accent
+                {"Otilde", "213"}, // - uppercase O, tilde
+                {"Ouml", "214"}, // - uppercase O, umlaut
+                {"times", "215"}, // multiplication sign
+                {"Oslash", "216"}, // - uppercase O, slash
+                {"Ugrave", "217"}, // - uppercase U, grave accent
+                {"Uacute", "218"}, // - uppercase U, acute accent
+                {"Ucirc", "219"}, // - uppercase U, circumflex accent
+                {"Uuml", "220"}, // - uppercase U, umlaut
+                {"Yacute", "221"}, // - uppercase Y, acute accent
+                {"THORN", "222"}, // - uppercase THORN, Icelandic
+                {"szlig", "223"}, // - lowercase sharps, German
+                {"agrave", "224"}, // - lowercase a, grave accent
+                {"aacute", "225"}, // - lowercase a, acute accent
+                {"acirc", "226"}, // - lowercase a, circumflex accent
+                {"atilde", "227"}, // - lowercase a, tilde
+                {"auml", "228"}, // - lowercase a, umlaut
+                {"aring", "229"}, // - lowercase a, ring
+                {"aelig", "230"}, // - lowercase ae
+                {"ccedil", "231"}, // - lowercase c, cedilla
+                {"egrave", "232"}, // - lowercase e, grave accent
+                {"eacute", "233"}, // - lowercase e, acute accent
+                {"ecirc", "234"}, // - lowercase e, circumflex accent
+                {"euml", "235"}, // - lowercase e, umlaut
+                {"igrave", "236"}, // - lowercase i, grave accent
+                {"iacute", "237"}, // - lowercase i, acute accent
+                {"icirc", "238"}, // - lowercase i, circumflex accent
+                {"iuml", "239"}, // - lowercase i, umlaut
+                {"eth", "240"}, // - lowercase eth, Icelandic
+                {"ntilde", "241"}, // - lowercase n, tilde
+                {"ograve", "242"}, // - lowercase o, grave accent
+                {"oacute", "243"}, // - lowercase o, acute accent
+                {"ocirc", "244"}, // - lowercase o, circumflex accent
+                {"otilde", "245"}, // - lowercase o, tilde
+                {"ouml", "246"}, // - lowercase o, umlaut
+                {"divide", "247"}, // division sign
+                {"oslash", "248"}, // - lowercase o, slash
+                {"ugrave", "249"}, // - lowercase u, grave accent
+                {"uacute", "250"}, // - lowercase u, acute accent
+                {"ucirc", "251"}, // - lowercase u, circumflex accent
+                {"uuml", "252"}, // - lowercase u, umlaut
+                {"yacute", "253"}, // - lowercase y, acute accent
+                {"thorn", "254"}, // - lowercase thorn, Icelandic
+                {"yuml", "255"}, // - lowercase y, umlaut
+            };
 
-    static final String[][] HTML40_GREEK_ARRAY = 
-    {
-    // <!-- Greek -->
-        {"Alpha", "913"}, // greek capital letter alpha, U+0391 -->
-        {"Beta", "914"}, // greek capital letter beta, U+0392 -->
-        {"Gamma", "915"}, // greek capital letter gamma,U+0393 ISOgrk3 -->
-        {"Delta", "916"}, // greek capital letter delta,U+0394 ISOgrk3 -->
-        {"Epsilon", "917"}, // greek capital letter epsilon, U+0395 -->
-        {"Zeta", "918"}, // greek capital letter zeta, U+0396 -->
-        {"Eta", "919"}, // greek capital letter eta, U+0397 -->
-        {"Theta", "920"}, // greek capital letter theta,U+0398 ISOgrk3 -->
-        {"Iota", "921"}, // greek capital letter iota, U+0399 -->
-        {"Kappa", "922"}, // greek capital letter kappa, U+039A -->
-        {"Lambda", "923"}, // greek capital letter lambda,U+039B ISOgrk3 -->
-        {"Mu", "924"}, // greek capital letter mu, U+039C -->
-        {"Nu", "925"}, // greek capital letter nu, U+039D -->
-        {"Xi", "926"}, // greek capital letter xi, U+039E ISOgrk3 -->
-        {"Omicron", "927"}, // greek capital letter omicron, U+039F -->
-        {"Pi", "928"}, // greek capital letter pi, U+03A0 ISOgrk3 -->
-        {"Rho", "929"}, // greek capital letter rho, U+03A1 -->
-        // <!-- there is no Sigmaf, and no U+03A2 character either -->
-        {"Sigma", "931"}, // greek capital letter sigma,U+03A3 ISOgrk3 -->
-        {"Tau", "932"}, // greek capital letter tau, U+03A4 -->
-        {"Upsilon", "933"}, // greek capital letter upsilon,U+03A5 ISOgrk3 -->
-        {"Phi", "934"}, // greek capital letter phi,U+03A6 ISOgrk3 -->
-        {"Chi", "935"}, // greek capital letter chi, U+03A7 -->
-        {"Psi", "936"}, // greek capital letter psi,U+03A8 ISOgrk3 -->
-        {"Omega", "937"}, // greek capital letter omega,U+03A9 ISOgrk3 -->
-        {"alpha", "945"}, // greek small letter alpha,U+03B1 ISOgrk3 -->
-        {"beta", "946"}, // greek small letter beta, U+03B2 ISOgrk3 -->
-        {"gamma", "947"}, // greek small letter gamma,U+03B3 ISOgrk3 -->
-        {"delta", "948"}, // greek small letter delta,U+03B4 ISOgrk3 -->
-        {"epsilon", "949"}, // greek small letter epsilon,U+03B5 ISOgrk3 -->
-        {"zeta", "950"}, // greek small letter zeta, U+03B6 ISOgrk3 -->
-        {"eta", "951"}, // greek small letter eta, U+03B7 ISOgrk3 -->
-        {"theta", "952"}, // greek small letter theta,U+03B8 ISOgrk3 -->
-        {"iota", "953"}, // greek small letter iota, U+03B9 ISOgrk3 -->
-        {"kappa", "954"}, // greek small letter kappa,U+03BA ISOgrk3 -->
-        {"lambda", "955"}, // greek small letter lambda,U+03BB ISOgrk3 -->
-        {"mu", "956"}, // greek small letter mu, U+03BC ISOgrk3 -->
-        {"nu", "957"}, // greek small letter nu, U+03BD ISOgrk3 -->
-        {"xi", "958"}, // greek small letter xi, U+03BE ISOgrk3 -->
-        {"omicron", "959"}, // greek small letter omicron, U+03BF NEW -->
-        {"pi", "960"}, // greek small letter pi, U+03C0 ISOgrk3 -->
-        {"rho", "961"}, // greek small letter rho, U+03C1 ISOgrk3 -->
-        {"sigmaf", "962"}, // greek small letter final sigma,U+03C2 ISOgrk3 -->
-        {"sigma", "963"}, // greek small letter sigma,U+03C3 ISOgrk3 -->
-        {"tau", "964"}, // greek small letter tau, U+03C4 ISOgrk3 -->
-        {"upsilon", "965"}, // greek small letter upsilon,U+03C5 ISOgrk3 -->
-        {"phi", "966"}, // greek small letter phi, U+03C6 ISOgrk3 -->
-        {"chi", "967"}, // greek small letter chi, U+03C7 ISOgrk3 -->
-        {"psi", "968"}, // greek small letter psi, U+03C8 ISOgrk3 -->
-        {"omega", "969"}, // greek small letter omega,U+03C9 ISOgrk3 -->
-        {"thetasym", "977"}, // greek small letter theta symbol,U+03D1 NEW -->
-        {"upsih", "978"}, // greek upsilon with hook symbol,U+03D2 NEW -->
-        {"piv", "982"}, // greek pi symbol, U+03D6 ISOgrk3 -->
-    };
+    static final String[][] HTML40_GREEK_ARRAY
+            = {
+                // <!-- Greek -->
+                {"Alpha", "913"}, // greek capital letter alpha, U+0391 -->
+                {"Beta", "914"}, // greek capital letter beta, U+0392 -->
+                {"Gamma", "915"}, // greek capital letter gamma,U+0393 ISOgrk3 -->
+                {"Delta", "916"}, // greek capital letter delta,U+0394 ISOgrk3 -->
+                {"Epsilon", "917"}, // greek capital letter epsilon, U+0395 -->
+                {"Zeta", "918"}, // greek capital letter zeta, U+0396 -->
+                {"Eta", "919"}, // greek capital letter eta, U+0397 -->
+                {"Theta", "920"}, // greek capital letter theta,U+0398 ISOgrk3 -->
+                {"Iota", "921"}, // greek capital letter iota, U+0399 -->
+                {"Kappa", "922"}, // greek capital letter kappa, U+039A -->
+                {"Lambda", "923"}, // greek capital letter lambda,U+039B ISOgrk3 -->
+                {"Mu", "924"}, // greek capital letter mu, U+039C -->
+                {"Nu", "925"}, // greek capital letter nu, U+039D -->
+                {"Xi", "926"}, // greek capital letter xi, U+039E ISOgrk3 -->
+                {"Omicron", "927"}, // greek capital letter omicron, U+039F -->
+                {"Pi", "928"}, // greek capital letter pi, U+03A0 ISOgrk3 -->
+                {"Rho", "929"}, // greek capital letter rho, U+03A1 -->
+                // <!-- there is no Sigmaf, and no U+03A2 character either -->
+                {"Sigma", "931"}, // greek capital letter sigma,U+03A3 ISOgrk3 -->
+                {"Tau", "932"}, // greek capital letter tau, U+03A4 -->
+                {"Upsilon", "933"}, // greek capital letter upsilon,U+03A5 ISOgrk3 -->
+                {"Phi", "934"}, // greek capital letter phi,U+03A6 ISOgrk3 -->
+                {"Chi", "935"}, // greek capital letter chi, U+03A7 -->
+                {"Psi", "936"}, // greek capital letter psi,U+03A8 ISOgrk3 -->
+                {"Omega", "937"}, // greek capital letter omega,U+03A9 ISOgrk3 -->
+                {"alpha", "945"}, // greek small letter alpha,U+03B1 ISOgrk3 -->
+                {"beta", "946"}, // greek small letter beta, U+03B2 ISOgrk3 -->
+                {"gamma", "947"}, // greek small letter gamma,U+03B3 ISOgrk3 -->
+                {"delta", "948"}, // greek small letter delta,U+03B4 ISOgrk3 -->
+                {"epsilon", "949"}, // greek small letter epsilon,U+03B5 ISOgrk3 -->
+                {"zeta", "950"}, // greek small letter zeta, U+03B6 ISOgrk3 -->
+                {"eta", "951"}, // greek small letter eta, U+03B7 ISOgrk3 -->
+                {"theta", "952"}, // greek small letter theta,U+03B8 ISOgrk3 -->
+                {"iota", "953"}, // greek small letter iota, U+03B9 ISOgrk3 -->
+                {"kappa", "954"}, // greek small letter kappa,U+03BA ISOgrk3 -->
+                {"lambda", "955"}, // greek small letter lambda,U+03BB ISOgrk3 -->
+                {"mu", "956"}, // greek small letter mu, U+03BC ISOgrk3 -->
+                {"nu", "957"}, // greek small letter nu, U+03BD ISOgrk3 -->
+                {"xi", "958"}, // greek small letter xi, U+03BE ISOgrk3 -->
+                {"omicron", "959"}, // greek small letter omicron, U+03BF NEW -->
+                {"pi", "960"}, // greek small letter pi, U+03C0 ISOgrk3 -->
+                {"rho", "961"}, // greek small letter rho, U+03C1 ISOgrk3 -->
+                {"sigmaf", "962"}, // greek small letter final sigma,U+03C2 ISOgrk3 -->
+                {"sigma", "963"}, // greek small letter sigma,U+03C3 ISOgrk3 -->
+                {"tau", "964"}, // greek small letter tau, U+03C4 ISOgrk3 -->
+                {"upsilon", "965"}, // greek small letter upsilon,U+03C5 ISOgrk3 -->
+                {"phi", "966"}, // greek small letter phi, U+03C6 ISOgrk3 -->
+                {"chi", "967"}, // greek small letter chi, U+03C7 ISOgrk3 -->
+                {"psi", "968"}, // greek small letter psi, U+03C8 ISOgrk3 -->
+                {"omega", "969"}, // greek small letter omega,U+03C9 ISOgrk3 -->
+                {"thetasym", "977"}, // greek small letter theta symbol,U+03D1 NEW -->
+                {"upsih", "978"}, // greek upsilon with hook symbol,U+03D2 NEW -->
+                {"piv", "982"}, // greek pi symbol, U+03D6 ISOgrk3 -->
+            };
 
     // http://www.w3.org/TR/REC-html40/sgml/entities.html
     // package scoped for testing
     static final String[][] HTML40_ARRAY = {
-    // <!-- Latin Extended-B -->
+        // <!-- Latin Extended-B -->
         {"fnof", "402"}, // latin small f with hook = function= florin, U+0192 ISOtech -->
         // <!-- General Punctuation -->
         {"bull", "8226"}, // bullet = black small circle,U+2022 ISOpub -->
@@ -363,12 +370,12 @@ public class Entities
      * </p>
      */
     public static final Entities XML;
-    
+
     /**
      * <p>
      * A set of common entities that should be escaped in HTML. This includes
      * double-quote, ampersand, less-than, greater-than and chars 160 - 190
-     * 
+     * <p>
      * </p>
      */
     public static final Entities HTML_BASIC;
@@ -394,30 +401,26 @@ public class Entities
      */
     public static final Entities HTML40_FULL;
 
-    static
-    {
+    static {
         XML = new Entities();
         XML.addEntities(BASIC_ARRAY);
         XML.addEntities(APOS_ARRAY);
     }
-    
-    static
-    {
+
+    static {
         HTML_BASIC = new Entities();
         HTML_BASIC.addEntities(BASIC_ARRAY);
         HTML_BASIC.addEntities(SPECIAL_CHARS);
     }
 
-    static
-    {
+    static {
         HTML32 = new Entities();
         HTML32.addEntities(BASIC_ARRAY);
         HTML32.addEntities(SPECIAL_CHARS);
         HTML32.addEntities(ISO8859_1_ARRAY);
     }
 
-    static
-    {
+    static {
         HTML40 = new Entities();
         HTML40.addEntities(BASIC_ARRAY);
         HTML40.addEntities(SPECIAL_CHARS);
@@ -425,8 +428,7 @@ public class Entities
         HTML40.addEntities(HTML40_ARRAY);
     }
 
-    static
-    {
+    static {
         HTML40_FULL = new Entities();
         HTML40_FULL.addEntities(BASIC_ARRAY);
         HTML40_FULL.addEntities(SPECIAL_CHARS);
@@ -435,8 +437,7 @@ public class Entities
         HTML40_FULL.addEntities(HTML40_GREEK_ARRAY);
     }
 
-    static interface EntityMap
-    {
+    static interface EntityMap {
 
         void add(String name, int value);
 
@@ -445,124 +446,106 @@ public class Entities
         int value(String name);
     }
 
-    static class PrimitiveEntityMap implements EntityMap
-    {
+    static class PrimitiveEntityMap implements EntityMap {
 
         private Map mapNameToValue = new HashMap();
 
         private IntHashMap mapValueToName = new IntHashMap();
 
         @Override
-        public void add(String name, int value)
-        {
+        public void add(String name, int value) {
             mapNameToValue.put(name, value);
             mapValueToName.put(value, name);
         }
 
         @Override
-        public String name(int value)
-        {
-            return (String)mapValueToName.get(value);
+        public String name(int value) {
+            return (String) mapValueToName.get(value);
         }
 
         @Override
-        public int value(String name)
-        {
+        public int value(String name) {
             Object value = mapNameToValue.get(name);
-            if(value == null)
-            {
+            if (value == null) {
                 return -1;
             }
-            return ((Integer)value);
+            return ((Integer) value);
         }
     }
 
-    static abstract class MapIntMap implements Entities.EntityMap
-    {
+    static abstract class MapIntMap implements Entities.EntityMap {
 
         protected Map mapNameToValue;
 
         protected Map mapValueToName;
 
-        public void add(String name, int value)
-        {
-            mapNameToValue.put(name, new Integer(value));
-            mapValueToName.put(new Integer(value), name);
+        @Override
+        public void add(String name, int value) {
+            mapNameToValue.put(name, value);
+            mapValueToName.put(value, name);
         }
 
-        public String name(int value)
-        {
-            return (String)mapValueToName.get(new Integer(value));
+        @Override
+        public String name(int value) {
+            return (String) mapValueToName.get(value);
         }
 
-        public int value(String name)
-        {
+        @Override
+        public int value(String name) {
             Object value = mapNameToValue.get(name);
-            if(value == null)
-            {
+            if (value == null) {
                 return -1;
             }
-            return ((Integer)value).intValue();
+            return ((Integer) value);
         }
     }
 
-    static class HashEntityMap extends MapIntMap
-    {
+    static class HashEntityMap extends MapIntMap {
 
-        public HashEntityMap()
-        {
+        public HashEntityMap() {
             mapNameToValue = new HashMap();
             mapValueToName = new HashMap();
         }
     }
 
-    static class TreeEntityMap extends MapIntMap
-    {
+    static class TreeEntityMap extends MapIntMap {
 
-        public TreeEntityMap()
-        {
+        public TreeEntityMap() {
             mapNameToValue = new TreeMap();
             mapValueToName = new TreeMap();
         }
     }
 
-    static class LookupEntityMap extends PrimitiveEntityMap
-    {
+    static class LookupEntityMap extends PrimitiveEntityMap {
 
         private String[] lookupTable;
 
         private int LOOKUP_TABLE_SIZE = 256;
 
-        public String name(int value)
-        {
-            if(value < LOOKUP_TABLE_SIZE)
-            {
+        @Override
+        public String name(int value) {
+            if (value < LOOKUP_TABLE_SIZE) {
                 return lookupTable()[value];
             }
             return super.name(value);
         }
 
-        private String[] lookupTable()
-        {
-            if(lookupTable == null)
-            {
+        private String[] lookupTable() {
+            if (lookupTable == null) {
                 createLookupTable();
             }
             return lookupTable;
         }
 
-        private void createLookupTable()
-        {
+        private void createLookupTable() {
             lookupTable = new String[LOOKUP_TABLE_SIZE];
-            for(int i = 0; i < LOOKUP_TABLE_SIZE; ++i)
-            {
+            for (int i = 0; i < LOOKUP_TABLE_SIZE; ++i) {
                 lookupTable[i] = super.name(i);
             }
         }
     }
 
-    static class ArrayEntityMap implements EntityMap
-    {
+    static class ArrayEntityMap implements EntityMap {
 
         protected int growBy = 100;
 
@@ -572,31 +555,27 @@ public class Entities
 
         protected int[] values;
 
-        public ArrayEntityMap()
-        {
+        public ArrayEntityMap() {
             names = new String[growBy];
             values = new int[growBy];
         }
 
-        public ArrayEntityMap(int growBy)
-        {
+        public ArrayEntityMap(int growBy) {
             this.growBy = growBy;
             names = new String[growBy];
             values = new int[growBy];
         }
 
-        public void add(String name, int value)
-        {
+        @Override
+        public void add(String name, int value) {
             ensureCapacity(size + 1);
             names[size] = name;
             values[size] = value;
             size++;
         }
 
-        protected void ensureCapacity(int capacity)
-        {
-            if(capacity > names.length)
-            {
+        protected void ensureCapacity(int capacity) {
+            if (capacity > names.length) {
                 int newSize = Math.max(capacity, size + growBy);
                 String[] newNames = new String[newSize];
                 System.arraycopy(names, 0, newNames, 0, size);
@@ -607,24 +586,20 @@ public class Entities
             }
         }
 
-        public String name(int value)
-        {
-            for(int i = 0; i < size; ++i)
-            {
-                if(values[i] == value)
-                {
+        @Override
+        public String name(int value) {
+            for (int i = 0; i < size; ++i) {
+                if (values[i] == value) {
                     return names[i];
                 }
             }
             return null;
         }
 
-        public int value(String name)
-        {
-            for(int i = 0; i < size; ++i)
-            {
-                if(names[i].equals(name))
-                {
+        @Override
+        public int value(String name) {
+            for (int i = 0; i < size; ++i) {
+                if (names[i].equals(name)) {
                     return values[i];
                 }
             }
@@ -632,51 +607,40 @@ public class Entities
         }
     }
 
-    static class BinaryEntityMap extends ArrayEntityMap
-    {
+    static class BinaryEntityMap extends ArrayEntityMap {
 
-        public BinaryEntityMap()
-        {
+        public BinaryEntityMap() {
         }
 
-        public BinaryEntityMap(int growBy)
-        {
+        public BinaryEntityMap(int growBy) {
             super(growBy);
         }
 
         // based on code in java.util.Arrays
-        private int binarySearch(int key)
-        {
+        private int binarySearch(int key) {
             int low = 0;
             int high = size - 1;
 
-            while(low <= high)
-            {
+            while (low <= high) {
                 int mid = (low + high) >> 1;
                 int midVal = values[mid];
 
-                if(midVal < key)
-                {
+                if (midVal < key) {
                     low = mid + 1;
-                }
-                else if(midVal > key)
-                {
+                } else if (midVal > key) {
                     high = mid - 1;
-                }
-                else
-                {
+                } else {
                     return mid; // key found
                 }
             }
             return -(low + 1); // key not found.
         }
 
-        public void add(String name, int value)
-        {
+        @Override
+        public void add(String name, int value) {
             ensureCapacity(size + 1);
             int insertAt = binarySearch(value);
-            if(insertAt > 0)
-            {
+            if (insertAt > 0) {
                 return; // note: this means you can't insert the same value twice
             }
             insertAt = -(insertAt + 1); // binarySearch returns it negative and off-by-one
@@ -687,11 +651,10 @@ public class Entities
             size++;
         }
 
-        public String name(int value)
-        {
+        @Override
+        public String name(int value) {
             int index = binarySearch(value);
-            if(index < 0)
-            {
+            if (index < 0) {
                 return null;
             }
             return names[index];
@@ -701,42 +664,38 @@ public class Entities
     // package scoped for testing
     EntityMap map = new Entities.LookupEntityMap();
 
-    public void addEntities(String[][] entityArray)
-    {
-        for(int i = 0; i < entityArray.length; ++i)
-        {
+    public void addEntities(String[][] entityArray) {
+        for (int i = 0; i < entityArray.length; ++i) {
             addEntity(entityArray[i][0], Integer.parseInt(entityArray[i][1]));
         }
     }
 
-    public void addEntity(String name, int value)
-    {
+    public void addEntity(String name, int value) {
         map.add(name, value);
     }
 
-    public String entityName(int value)
-    {
+    public String entityName(int value) {
         return map.name(value);
     }
 
-    public int entityValue(String name)
-    {
+    public int entityValue(String name) {
         return map.value(name);
     }
-    
+
     /**
      * <p>
      * Escapes the characters in a <code>String</code>.
      * </p>
      * <p>
-     * For example, if you have called addEntity(&quot;foo&quot;, 0xA1), escape(&quot;\u00A1&quot;) will return
+     * For example, if you have called addEntity(&quot;foo&quot;, 0xA1),
+     * escape(&quot;\u00A1&quot;) will return
      * &quot;&amp;foo;&quot;
      * </p>
-     * @param str The <code>String</code> to escape.   
+     *
+     * @param str The <code>String</code> to escape.
      * @return A new escaped <code>String</code>.
      */
-    public String escape(String str)
-    {
+    public String escape(String str) {
         return escape(str, true);
     }
 
@@ -745,38 +704,33 @@ public class Entities
      * Escapes the characters in a <code>String</code>.
      * </p>
      * <p>
-     * For example, if you have called addEntity(&quot;foo&quot;, 0xA1), escape(&quot;\u00A1&quot;) will return
+     * For example, if you have called addEntity(&quot;foo&quot;, 0xA1),
+     * escape(&quot;\u00A1&quot;) will return
      * &quot;&amp;foo;&quot;
      * </p>
+     *
      * @param str The <code>String</code> to escape.
-     * @param escapeNon7bit Indicate whether non-7-bit chars should be escaped as well
+     * @param escapeNon7bit Indicate whether non-7-bit chars should be escaped
+     * as well
      * @return A new escaped <code>String</code>.
      */
-    public String escape(String str, boolean escapeNon7bit)
-    {
+    public String escape(String str, boolean escapeNon7bit) {
         // todo: rewrite to use a Writer
-        StringBuffer buf = new StringBuffer(str.length() * 2);
+        StringBuilder buf = new StringBuilder(str.length() * 2);
         int i;
-        for(i = 0; i < str.length(); ++i)
-        {
+        for (i = 0; i < str.length(); ++i) {
             char ch = str.charAt(i);
             String entityName = this.entityName(ch);
-            if(entityName == null)
-            {
-                if(escapeNon7bit && ch > 0x7F)
-                {
+            if (entityName == null) {
+                if (escapeNon7bit && ch > 0x7F) {
                     int intValue = ch;
                     buf.append("&#");
                     buf.append(intValue);
                     buf.append(';');
-                }
-                else
-                {
+                } else {
                     buf.append(ch);
                 }
-            }
-            else
-            {
+            } else {
                 buf.append('&');
                 buf.append(entityName);
                 buf.append(';');
@@ -790,86 +744,74 @@ public class Entities
      * Unescapes the entities in a <code>String</code>.
      * </p>
      * <p>
-     * For example, if you have called addEntity(&quot;foo&quot;, 0xA1), unescape(&quot;&amp;foo;&quot;) will return
+     * For example, if you have called addEntity(&quot;foo&quot;, 0xA1),
+     * unescape(&quot;&amp;foo;&quot;) will return
      * &quot;\u00A1&quot;
      * </p>
+     *
      * @param str The <code>String</code> to escape.
      * @return A new escaped <code>String</code>.
      */
-    public String unescape(String str)
-    {
+    public String unescape(String str) {
         return doUnescape(str, false);
     }
-    
+
     /**
      * <p>
      * Unescapes the unknown entities in a <code>String</code>.
      * </p>
      * <p>
-     * For example, if you have called 
-     * addEntity(&quot;foo&quot;, 0xA1), unescape(&quot;&amp;foo;&quot;) will return
+     * For example, if you have called
+     * addEntity(&quot;foo&quot;, 0xA1), unescape(&quot;&amp;foo;&quot;) will
+     * return
      * & quot;&amp;foo& quot;
      * </p>
      * <p>
-     * This is useful if you only want to unescape Cryllic entities, for example.
+     * This is useful if you only want to unescape Cryllic entities, for
+     * example.
      * </p>
+     *
      * @param str The <code>String</code> to escape.
      * @return A new escaped <code>String</code>.
      */
-    public String unescapeUnknownEntities(String str)
-    {
+    public String unescapeUnknownEntities(String str) {
         return doUnescape(str, true);
     }
-    
-    private String doUnescape(String str, boolean unknownEntitiesOnly)
-    {
-        StringBuffer buf = new StringBuffer(str.length());
+
+    private String doUnescape(String str, boolean unknownEntitiesOnly) {
+        StringBuilder buf = new StringBuilder(str.length());
         int i;
-        for(i = 0; i < str.length(); ++i)
-        {
+        for (i = 0; i < str.length(); ++i) {
             char ch = str.charAt(i);
-            if(ch == '&')
-            {
+            if (ch == '&') {
                 int semi = str.indexOf(';', i + 1);
-                if(semi == -1)
-                {
+                if (semi == -1) {
                     buf.append(ch);
                     continue;
                 }
                 String entName = str.substring(i + 1, semi);
                 int entValue;
-                if(entName.charAt(0) == '#')
-                {
+                if (entName.charAt(0) == '#') {
                     char charAt1 = entName.charAt(1);
-                    if(charAt1 == 'x' || charAt1 == 'X')
-                    {
-                        entValue = Integer.valueOf(entName.substring(2), 16).intValue();
-                    }
-                    else
-                    {
+                    if (charAt1 == 'x' || charAt1 == 'X') {
+                        entValue = Integer.parseInt(entName.substring(2));
+                    } else {
                         entValue = Integer.parseInt(entName.substring(1));
                     }
-                }
-                else
-                {
+                } else {
                     entValue = this.entityValue(entName);
                 }
 
-                if(entValue == -1 || 
-                    unknownEntitiesOnly && (this.entityName(entValue) != null))
-                {
+                if (entValue == -1
+                        || unknownEntitiesOnly && (this.entityName(entValue) != null)) {
                     buf.append('&');
                     buf.append(entName);
                     buf.append(';');
-                }
-                else
-                {
-                    buf.append((char)(entValue));
+                } else {
+                    buf.append((char) (entValue));
                 }
                 i = semi;
-            }
-            else
-            {
+            } else {
                 buf.append(ch);
             }
         }

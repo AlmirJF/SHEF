@@ -22,19 +22,18 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import net.atlanticbb.tantlinger.ui.text.TextEditPopupManager;
 
+public final class ImageAttributesPanel extends HTMLAttributeEditorPanel {
 
-public class ImageAttributesPanel extends HTMLAttributeEditorPanel
-{
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
-    private static final String ALIGNMENTS[] =
-    {
-        "top", "middle", "bottom", "left", "right" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-    };
-    
+    private static final String ALIGNMENTS[]
+            = {
+                "top", "middle", "bottom", "left", "right" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+            };
+
     private JLabel imgUrlLabel = null;
     private JButton selectFileButton = null;
     private JCheckBox altTextCB = null;
@@ -59,192 +58,157 @@ public class ImageAttributesPanel extends HTMLAttributeEditorPanel
     /**
      * This is the default constructor
      */
-    public ImageAttributesPanel()
-    {
+    public ImageAttributesPanel() {
         super();
         initialize();
         updateComponentsFromAttribs();
-    }    
-    
-    public void updateComponentsFromAttribs()
-    {
-        if(attribs.containsKey("src")) //$NON-NLS-1$
+    }
+
+    @Override
+    public void updateComponentsFromAttribs() {
+        if (attribs.containsKey("src")) //$NON-NLS-1$
+        {
             imgUrlField.setText(attribs.get("src").toString()); //$NON-NLS-1$
-        
-        if(attribs.containsKey("alt")) //$NON-NLS-1$
+        }
+        if (attribs.containsKey("alt")) //$NON-NLS-1$
         {
             altTextCB.setSelected(true);
             altTextField.setEditable(true);
             altTextField.setText(attribs.get("alt").toString()); //$NON-NLS-1$
-        }
-        else
-        {
+        } else {
             altTextCB.setSelected(false);
             altTextField.setEditable(false);
         }
-        
-        if(attribs.containsKey("width")) //$NON-NLS-1$
+
+        if (attribs.containsKey("width")) //$NON-NLS-1$
         {
             widthCB.setSelected(true);
             widthField.setEnabled(true);
-            try
-            {
-                widthField.getModel().setValue(
-                    new Integer(attribs.get("width").toString())); //$NON-NLS-1$
-            }
-            catch(Exception ex)
-            {
+            try {
+                widthField.getModel().setValue(Integer.valueOf(attribs.get("width").toString())); //$NON-NLS-1$
+            } catch (NumberFormatException ex) {
                 ex.printStackTrace();
             }
-        }
-        else
-        {
+        } else {
             widthCB.setSelected(false);
             widthField.setEnabled(false);
         }
-        
-        if(attribs.containsKey("height")) //$NON-NLS-1$
+
+        if (attribs.containsKey("height")) //$NON-NLS-1$
         {
             heightCB.setSelected(true);
             heightField.setEnabled(true);
-            try
-            {
-                heightField.getModel().setValue(
-                    new Integer(attribs.get("height").toString())); //$NON-NLS-1$
-            }
-            catch(Exception ex)
-            {
+            try {
+                heightField.getModel().setValue(Integer.valueOf(attribs.get("height").toString())); //$NON-NLS-1$
+            } catch (NumberFormatException ex) {
                 ex.printStackTrace();
             }
-        }
-        else
-        {
+        } else {
             heightCB.setSelected(false);
             heightField.setEnabled(false);
         }
-        
-        if(attribs.containsKey("hspace")) //$NON-NLS-1$
+
+        if (attribs.containsKey("hspace")) //$NON-NLS-1$
         {
             hSpaceCB.setSelected(true);
             hSpaceField.setEnabled(true);
-            try
-            {
-                hSpaceField.getModel().setValue(
-                    new Integer(attribs.get("hspace").toString())); //$NON-NLS-1$
-            }
-            catch(Exception ex)
-            {
+            try {
+                hSpaceField.getModel().setValue(Integer.valueOf(attribs.get("hspace").toString())); //$NON-NLS-1$
+            } catch (NumberFormatException ex) {
                 ex.printStackTrace();
             }
-        }
-        else
-        {
+        } else {
             hSpaceCB.setSelected(false);
             hSpaceField.setEnabled(false);
         }
-        
-        if(attribs.containsKey("vspace")) //$NON-NLS-1$
+
+        if (attribs.containsKey("vspace")) //$NON-NLS-1$
         {
             vSpaceCB.setSelected(true);
             vSpaceField.setEnabled(true);
-            try
-            {
-                vSpaceField.getModel().setValue(
-                    new Integer(attribs.get("vspace").toString())); //$NON-NLS-1$
-            }
-            catch(Exception ex)
-            {
+            try {
+                vSpaceField.getModel().setValue(Integer.valueOf(attribs.get("vspace").toString())); //$NON-NLS-1$
+            } catch (NumberFormatException ex) {
                 ex.printStackTrace();
             }
-        }
-        else
-        {
+        } else {
             vSpaceCB.setSelected(false);
             vSpaceField.setEnabled(false);
         }
-        
-        if(attribs.containsKey("border")) //$NON-NLS-1$
+
+        if (attribs.containsKey("border")) //$NON-NLS-1$
         {
             borderCB.setSelected(true);
             borderField.setEnabled(true);
-            try
-            {
-                borderField.getModel().setValue(
-                    new Integer(attribs.get("border").toString())); //$NON-NLS-1$
-            }
-            catch(Exception ex)
-            {
+            try {
+                borderField.getModel().setValue(Integer.valueOf(attribs.get("border").toString())); //$NON-NLS-1$
+            } catch (NumberFormatException ex) {
                 ex.printStackTrace();
             }
-        }
-        else
-        {
+        } else {
             borderCB.setSelected(false);
             borderField.setEnabled(false);
         }
-        
-        if(attribs.containsKey("align")) //$NON-NLS-1$
+
+        if (attribs.containsKey("align")) //$NON-NLS-1$
         {
             alignCB.setSelected(true);
             alignCombo.setEnabled(true);
             alignCombo.setSelectedItem(attribs.get("align")); //$NON-NLS-1$
-        }
-        else
-        {
+        } else {
             alignCB.setSelected(false);
             alignCombo.setEnabled(false);
         }
     }
-    
-    
-    public void updateAttribsFromComponents()
-    {
+
+    @Override
+    public void updateAttribsFromComponents() {
         attribs.put("src", imgUrlField.getText()); //$NON-NLS-1$
-        
-        if(altTextCB.isSelected())
+
+        if (altTextCB.isSelected()) {
             attribs.put("alt", altTextField.getText()); //$NON-NLS-1$
-        else
+        } else {
             attribs.remove("alt"); //$NON-NLS-1$
-        
-        if(widthCB.isSelected())
+        }
+        if (widthCB.isSelected()) {
             attribs.put("width", widthField.getModel().getValue().toString()); //$NON-NLS-1$
-        else
+        } else {
             attribs.remove("width"); //$NON-NLS-1$
-        
-        if(heightCB.isSelected())
+        }
+        if (heightCB.isSelected()) {
             attribs.put("height", heightField.getModel().getValue().toString()); //$NON-NLS-1$
-        else
+        } else {
             attribs.remove("height"); //$NON-NLS-1$
-        
-        if(vSpaceCB.isSelected())
+        }
+        if (vSpaceCB.isSelected()) {
             attribs.put("vspace", vSpaceField.getModel().getValue().toString()); //$NON-NLS-1$
-        else
+        } else {
             attribs.remove("vspace"); //$NON-NLS-1$
-        
-        if(hSpaceCB.isSelected())
+        }
+        if (hSpaceCB.isSelected()) {
             attribs.put("hspace", hSpaceField.getModel().getValue().toString()); //$NON-NLS-1$
-        else
+        } else {
             attribs.remove("hspace"); //$NON-NLS-1$
-        
-        if(borderCB.isSelected())
+        }
+        if (borderCB.isSelected()) {
             attribs.put("border", borderField.getModel().getValue().toString()); //$NON-NLS-1$
-        else
+        } else {
             attribs.remove("border"); //$NON-NLS-1$
-        
-        if(alignCB.isSelected())
+        }
+        if (alignCB.isSelected()) {
             attribs.put("align", alignCombo.getSelectedItem().toString()); //$NON-NLS-1$
-        else
+        } else {
             attribs.remove("align"); //$NON-NLS-1$
+        }
     }
 
     /**
      * This method initializes this
-     * 
+     *
      * @return void
      */
-    private void initialize()
-    {
-        
+    private void initialize() {
+
         GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
         gridBagConstraints22.gridx = 2;
         gridBagConstraints22.gridwidth = 2;
@@ -268,7 +232,7 @@ public class ImageAttributesPanel extends HTMLAttributeEditorPanel
         gridBagConstraints15.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints15.gridy = 1;
         gridBagConstraints15.weightx = 1.0;
-        gridBagConstraints15.insets = new java.awt.Insets(0,0,10,0);
+        gridBagConstraints15.insets = new java.awt.Insets(0, 0, 10, 0);
         gridBagConstraints15.gridwidth = 1;
         gridBagConstraints15.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints15.gridx = 1;
@@ -276,45 +240,42 @@ public class ImageAttributesPanel extends HTMLAttributeEditorPanel
         gridBagConstraints14.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints14.gridy = 0;
         gridBagConstraints14.weightx = 1.0;
-        gridBagConstraints14.insets = new java.awt.Insets(0,0,5,0);
+        gridBagConstraints14.insets = new java.awt.Insets(0, 0, 5, 0);
         gridBagConstraints14.gridwidth = 1;
         gridBagConstraints14.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints14.gridx = 1;
         GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
         gridBagConstraints1.gridx = 0;
         gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints1.insets = new java.awt.Insets(0,0,10,5);
+        gridBagConstraints1.insets = new java.awt.Insets(0, 0, 10, 5);
         gridBagConstraints1.gridy = 1;
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0,0,5,5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         gridBagConstraints.gridy = 0;
         imgUrlLabel = new JLabel();
         imgUrlLabel.setText(i18n.str("image_url")); //$NON-NLS-1$
-        
+
         selectFileButton = new JButton("Select Image File...");
-        selectFileButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                
-                JFileChooser chooser = new JFileChooser(System.getProperty ("user.home"));
-                File selected;
-                chooser.setDialogTitle("Select Image File");
-                chooser.addChoosableFileFilter(new FileNameExtensionFilter("Images", "jpg", "jpeg", "png", "gif"));
-                chooser.setAcceptAllFileFilterUsed(false);
-                int rc = chooser.showDialog(ImageAttributesPanel.this, "Select");
-                if (rc == JFileChooser.APPROVE_OPTION) {
-                    selected = chooser.getSelectedFile();
-                    if (selected == null)
-                        return;
-                    
-                    imgUrlField.setText("file:" + selected.getAbsolutePath());
-                    
+        selectFileButton.addActionListener((java.awt.event.ActionEvent evt) -> {
+            JFileChooser chooser = new JFileChooser(System.getProperty("user.home"));
+            File selected;
+            chooser.setDialogTitle("Select Image File");
+            chooser.addChoosableFileFilter(new FileNameExtensionFilter("Images", "jpg", "jpeg", "png", "gif"));
+            chooser.setAcceptAllFileFilterUsed(false);
+            int rc = chooser.showDialog(ImageAttributesPanel.this, "Select");
+            if (rc == JFileChooser.APPROVE_OPTION) {
+                selected = chooser.getSelectedFile();
+                if (selected == null) {
+                    return;
                 }
-                
+
+                imgUrlField.setText("file:" + selected.getAbsolutePath());
+
             }
         });
-        
+
         this.setLayout(new GridBagLayout());
         //this.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder(null, "Image Properties", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null), javax.swing.BorderFactory.createEmptyBorder(5,5,5,5)));
         this.add(imgUrlLabel, gridBagConstraints);
@@ -325,7 +286,7 @@ public class ImageAttributesPanel extends HTMLAttributeEditorPanel
         this.add(getAttribPanel(), gridBagConstraints16);
         this.add(getSpacerPanel(), gridBagConstraints21);
         this.setSize(700, 300);
-        
+
         TextEditPopupManager popupMan = TextEditPopupManager.getInstance();
         popupMan.registerJTextComponent(imgUrlField);
         popupMan.registerJTextComponent(altTextField);
@@ -334,102 +295,76 @@ public class ImageAttributesPanel extends HTMLAttributeEditorPanel
     }
 
     /**
-     * This method initializes altTextCB	
-     * 	
-     * @return javax.swing.JCheckBox	
+     * This method initializes altTextCB
+     *
+     * @return javax.swing.JCheckBox
      */
-    private JCheckBox getAltTextCB()
-    {
-        if(altTextCB == null)
-        {
+    private JCheckBox getAltTextCB() {
+        if (altTextCB == null) {
             altTextCB = new JCheckBox();
             altTextCB.setText(i18n.str("alt_text")); //$NON-NLS-1$
-            altTextCB.addItemListener(new java.awt.event.ItemListener()
-            {
-                public void itemStateChanged(java.awt.event.ItemEvent e)
-                {
-                    altTextField.setEditable(altTextCB.isSelected());
-                }
+            altTextCB.addItemListener((java.awt.event.ItemEvent e) -> {
+                altTextField.setEditable(altTextCB.isSelected());
             });
         }
         return altTextCB;
     }
 
     /**
-     * This method initializes widthCB	
-     * 	
-     * @return javax.swing.JCheckBox	
+     * This method initializes widthCB
+     *
+     * @return javax.swing.JCheckBox
      */
-    private JCheckBox getWidthCB()
-    {
-        if(widthCB == null)
-        {
+    private JCheckBox getWidthCB() {
+        if (widthCB == null) {
             widthCB = new JCheckBox();
             widthCB.setText(i18n.str("width")); //$NON-NLS-1$
-            widthCB.addItemListener(new java.awt.event.ItemListener()
-            {
-                public void itemStateChanged(java.awt.event.ItemEvent e)
-                {
-                    widthField.setEnabled(widthCB.isSelected());
-                }
+            widthCB.addItemListener((java.awt.event.ItemEvent e) -> {
+                widthField.setEnabled(widthCB.isSelected());
             });
         }
         return widthCB;
     }
 
     /**
-     * This method initializes heightCB	
-     * 	
-     * @return javax.swing.JCheckBox	
+     * This method initializes heightCB
+     *
+     * @return javax.swing.JCheckBox
      */
-    private JCheckBox getHeightCB()
-    {
-        if(heightCB == null)
-        {
+    private JCheckBox getHeightCB() {
+        if (heightCB == null) {
             heightCB = new JCheckBox();
             heightCB.setText(i18n.str("height")); //$NON-NLS-1$
-            heightCB.addItemListener(new java.awt.event.ItemListener()
-            {
-                public void itemStateChanged(java.awt.event.ItemEvent e)
-                {
-                    heightField.setEnabled(heightCB.isSelected());
-                }
+            heightCB.addItemListener((java.awt.event.ItemEvent e) -> {
+                heightField.setEnabled(heightCB.isSelected());
             });
         }
         return heightCB;
     }
 
     /**
-     * This method initializes borderCB	
-     * 	
-     * @return javax.swing.JCheckBox	
+     * This method initializes borderCB
+     *
+     * @return javax.swing.JCheckBox
      */
-    private JCheckBox getBorderCB()
-    {
-        if(borderCB == null)
-        {
+    private JCheckBox getBorderCB() {
+        if (borderCB == null) {
             borderCB = new JCheckBox();
             borderCB.setText(i18n.str("border")); //$NON-NLS-1$
-            borderCB.addItemListener(new java.awt.event.ItemListener()
-            {
-                public void itemStateChanged(java.awt.event.ItemEvent e)
-                {
-                    borderField.setEnabled(borderCB.isSelected());
-                }
+            borderCB.addItemListener((java.awt.event.ItemEvent e) -> {
+                borderField.setEnabled(borderCB.isSelected());
             });
         }
         return borderCB;
     }
 
     /**
-     * This method initializes widthField	
-     * 	
+     * This method initializes widthField
+     *
      * @return javax.swing.JSpinner
      */
-    private JSpinner getWidthField()
-    {
-        if(widthField == null)
-        {
+    private JSpinner getWidthField() {
+        if (widthField == null) {
             widthField = new JSpinner(new SpinnerNumberModel(1, 1, 999, 1));
             //widthField.setColumns(4);
         }
@@ -437,14 +372,12 @@ public class ImageAttributesPanel extends HTMLAttributeEditorPanel
     }
 
     /**
-     * This method initializes heightField	
-     * 	
+     * This method initializes heightField
+     *
      * @return javax.swing.JSpinner
      */
-    private JSpinner getHeightField()
-    {
-        if(heightField == null)
-        {
+    private JSpinner getHeightField() {
+        if (heightField == null) {
             heightField = new JSpinner(new SpinnerNumberModel(1, 1, 999, 1));
             //heightField.setColumns(4);
         }
@@ -452,14 +385,12 @@ public class ImageAttributesPanel extends HTMLAttributeEditorPanel
     }
 
     /**
-     * This method initializes borderField	
-     * 	
-     * @return javax.swing.JSpinner	
+     * This method initializes borderField
+     *
+     * @return javax.swing.JSpinner
      */
-    private JSpinner getBorderField()
-    {
-        if(borderField == null)
-        {
+    private JSpinner getBorderField() {
+        if (borderField == null) {
             borderField = new JSpinner(new SpinnerNumberModel(1, 0, 999, 1));
             //borderField.setColumns(4);
         }
@@ -467,80 +398,60 @@ public class ImageAttributesPanel extends HTMLAttributeEditorPanel
     }
 
     /**
-     * This method initializes vSpaceCB	
-     * 	
-     * @return javax.swing.JCheckBox	
+     * This method initializes vSpaceCB
+     *
+     * @return javax.swing.JCheckBox
      */
-    private JCheckBox getVSpaceCB()
-    {
-        if(vSpaceCB == null)
-        {
+    private JCheckBox getVSpaceCB() {
+        if (vSpaceCB == null) {
             vSpaceCB = new JCheckBox();
             vSpaceCB.setText(i18n.str("vspace")); //$NON-NLS-1$
-            vSpaceCB.addItemListener(new java.awt.event.ItemListener()
-            {
-                public void itemStateChanged(java.awt.event.ItemEvent e)
-                {
-                    vSpaceField.setEnabled(vSpaceCB.isSelected());
-                }
+            vSpaceCB.addItemListener((java.awt.event.ItemEvent e) -> {
+                vSpaceField.setEnabled(vSpaceCB.isSelected());
             });
         }
         return vSpaceCB;
     }
 
     /**
-     * This method initializes hSpaceCB	
-     * 	
-     * @return javax.swing.JCheckBox	
+     * This method initializes hSpaceCB
+     *
+     * @return javax.swing.JCheckBox
      */
-    private JCheckBox getHSpaceCB()
-    {
-        if(hSpaceCB == null)
-        {
+    private JCheckBox getHSpaceCB() {
+        if (hSpaceCB == null) {
             hSpaceCB = new JCheckBox();
             hSpaceCB.setText(i18n.str("hspace")); //$NON-NLS-1$
-            hSpaceCB.addItemListener(new java.awt.event.ItemListener()
-            {
-                public void itemStateChanged(java.awt.event.ItemEvent e)
-                {
-                    hSpaceField.setEnabled(hSpaceCB.isSelected());
-                }
+            hSpaceCB.addItemListener((java.awt.event.ItemEvent e) -> {
+                hSpaceField.setEnabled(hSpaceCB.isSelected());
             });
         }
         return hSpaceCB;
     }
 
     /**
-     * This method initializes alignCB	
-     * 	
-     * @return javax.swing.JCheckBox	
+     * This method initializes alignCB
+     *
+     * @return javax.swing.JCheckBox
      */
-    private JCheckBox getAlignCB()
-    {
-        if(alignCB == null)
-        {
+    private JCheckBox getAlignCB() {
+        if (alignCB == null) {
             alignCB = new JCheckBox();
             alignCB.setText(i18n.str("align")); //$NON-NLS-1$
-            alignCB.addItemListener(new java.awt.event.ItemListener()
-            {
-                public void itemStateChanged(java.awt.event.ItemEvent e)
-                {
-                    alignCombo.setEnabled(alignCB.isSelected());
-                }
+            alignCB.addItemListener((java.awt.event.ItemEvent e) -> {
+                alignCombo.setEnabled(alignCB.isSelected());
             });
         }
         return alignCB;
     }
 
     /**
-     * This method initializes vSpaceField	
-     * 	
-     * @return javax.swing.JSpinner	
+     * This method initializes vSpaceField
+     *
+     * @return javax.swing.JSpinner
      */
-    private JSpinner getVSpaceField()
-    {
-        if(vSpaceField == null)
-        {
+    private JSpinner getVSpaceField() {
+        if (vSpaceField == null) {
             vSpaceField = new JSpinner(new SpinnerNumberModel(1, 1, 999, 1));
             //vSpaceField.setColumns(4);
         }
@@ -548,14 +459,12 @@ public class ImageAttributesPanel extends HTMLAttributeEditorPanel
     }
 
     /**
-     * This method initializes hSpaceField	
-     * 	
-     * @return javax.swing.JSpinner	
+     * This method initializes hSpaceField
+     *
+     * @return javax.swing.JSpinner
      */
-    private JSpinner getHSpaceField()
-    {
-        if(hSpaceField == null)
-        {
+    private JSpinner getHSpaceField() {
+        if (hSpaceField == null) {
             hSpaceField = new JSpinner(new SpinnerNumberModel(1, 1, 999, 1));
             //hSpaceField.setColumns(4);
         }
@@ -563,56 +472,48 @@ public class ImageAttributesPanel extends HTMLAttributeEditorPanel
     }
 
     /**
-     * This method initializes alignCombo	
-     * 	
-     * @return javax.swing.JComboBox	
+     * This method initializes alignCombo
+     *
+     * @return javax.swing.JComboBox
      */
-    private JComboBox getAlignCombo()
-    {
-        if(alignCombo == null)
-        {
+    private JComboBox getAlignCombo() {
+        if (alignCombo == null) {
             alignCombo = new JComboBox(ALIGNMENTS);
         }
         return alignCombo;
     }
 
     /**
-     * This method initializes imgUrlField	
-     * 	
-     * @return javax.swing.JTextField	
+     * This method initializes imgUrlField
+     *
+     * @return javax.swing.JTextField
      */
-    private JTextField getImgUrlField()
-    {
-        if(imgUrlField == null)
-        {
+    private JTextField getImgUrlField() {
+        if (imgUrlField == null) {
             imgUrlField = new JTextField();
         }
         return imgUrlField;
     }
 
     /**
-     * This method initializes altTextField	
-     * 	
-     * @return javax.swing.JTextField	
+     * This method initializes altTextField
+     *
+     * @return javax.swing.JTextField
      */
-    private JTextField getAltTextField()
-    {
-        if(altTextField == null)
-        {
+    private JTextField getAltTextField() {
+        if (altTextField == null) {
             altTextField = new JTextField();
         }
         return altTextField;
     }
 
     /**
-     * This method initializes attribPanel	
-     * 	
-     * @return javax.swing.JPanel	
+     * This method initializes attribPanel
+     *
+     * @return javax.swing.JPanel
      */
-    private JPanel getAttribPanel()
-    {
-        if(attribPanel == null)
-        {
+    private JPanel getAttribPanel() {
+        if (attribPanel == null) {
             GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
             gridBagConstraints13.anchor = java.awt.GridBagConstraints.WEST;
             gridBagConstraints13.insets = new Insets(0, 0, 10, 0);
@@ -622,14 +523,14 @@ public class ImageAttributesPanel extends HTMLAttributeEditorPanel
             gridBagConstraints13.fill = java.awt.GridBagConstraints.NONE;
             GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
             gridBagConstraints12.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints12.insets = new java.awt.Insets(0,0,10,0);
+            gridBagConstraints12.insets = new java.awt.Insets(0, 0, 10, 0);
             gridBagConstraints12.gridx = 3;
             gridBagConstraints12.gridy = 1;
             gridBagConstraints12.weightx = 0.0;
             gridBagConstraints12.fill = java.awt.GridBagConstraints.NONE;
             GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
             gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints11.insets = new java.awt.Insets(0,0,5,0);
+            gridBagConstraints11.insets = new java.awt.Insets(0, 0, 5, 0);
             gridBagConstraints11.gridx = 3;
             gridBagConstraints11.gridy = 0;
             gridBagConstraints11.weightx = 0.0;
@@ -638,27 +539,27 @@ public class ImageAttributesPanel extends HTMLAttributeEditorPanel
             gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
             gridBagConstraints10.gridx = 2;
             gridBagConstraints10.gridy = 2;
-            gridBagConstraints10.insets = new java.awt.Insets(0,0,10,5);
+            gridBagConstraints10.insets = new java.awt.Insets(0, 0, 10, 5);
             GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
             gridBagConstraints9.anchor = java.awt.GridBagConstraints.WEST;
             gridBagConstraints9.gridx = 2;
             gridBagConstraints9.gridy = 1;
-            gridBagConstraints9.insets = new java.awt.Insets(0,0,10,5);
+            gridBagConstraints9.insets = new java.awt.Insets(0, 0, 10, 5);
             GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
             gridBagConstraints8.anchor = java.awt.GridBagConstraints.WEST;
             gridBagConstraints8.gridx = 2;
             gridBagConstraints8.gridy = 0;
-            gridBagConstraints8.insets = new java.awt.Insets(0,0,5,5);
+            gridBagConstraints8.insets = new java.awt.Insets(0, 0, 5, 5);
             GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
             gridBagConstraints7.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints7.insets = new java.awt.Insets(0,0,10,10);
+            gridBagConstraints7.insets = new java.awt.Insets(0, 0, 10, 10);
             gridBagConstraints7.gridx = 1;
             gridBagConstraints7.gridy = 2;
             gridBagConstraints7.weightx = 0.0;
             gridBagConstraints7.fill = java.awt.GridBagConstraints.NONE;
             GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
             gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints6.insets = new java.awt.Insets(0,0,10,10);
+            gridBagConstraints6.insets = new java.awt.Insets(0, 0, 10, 10);
             gridBagConstraints6.gridx = 1;
             gridBagConstraints6.gridy = 1;
             gridBagConstraints6.weightx = 0.0;
@@ -674,17 +575,17 @@ public class ImageAttributesPanel extends HTMLAttributeEditorPanel
             gridBagConstraints4.anchor = java.awt.GridBagConstraints.WEST;
             gridBagConstraints4.gridx = 0;
             gridBagConstraints4.gridy = 2;
-            gridBagConstraints4.insets = new java.awt.Insets(0,0,10,5);
+            gridBagConstraints4.insets = new java.awt.Insets(0, 0, 10, 5);
             GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
             gridBagConstraints3.anchor = java.awt.GridBagConstraints.WEST;
             gridBagConstraints3.gridx = 0;
             gridBagConstraints3.gridy = 1;
-            gridBagConstraints3.insets = new java.awt.Insets(0,0,10,5);
+            gridBagConstraints3.insets = new java.awt.Insets(0, 0, 10, 5);
             GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
             gridBagConstraints2.anchor = java.awt.GridBagConstraints.WEST;
             gridBagConstraints2.gridx = 0;
             gridBagConstraints2.gridy = 0;
-            gridBagConstraints2.insets = new java.awt.Insets(0,0,5,5);
+            gridBagConstraints2.insets = new java.awt.Insets(0, 0, 5, 5);
             attribPanel = new JPanel();
             attribPanel.setLayout(new GridBagLayout());
             attribPanel.add(getWidthCB(), gridBagConstraints2);
@@ -704,14 +605,12 @@ public class ImageAttributesPanel extends HTMLAttributeEditorPanel
     }
 
     /**
-     * This method initializes spacerPanel	
-     * 	
-     * @return javax.swing.JPanel	
+     * This method initializes spacerPanel
+     *
+     * @return javax.swing.JPanel
      */
-    private JPanel getSpacerPanel()
-    {
-        if(spacerPanel == null)
-        {
+    private JPanel getSpacerPanel() {
+        if (spacerPanel == null) {
             spacerPanel = new JPanel();
         }
         return spacerPanel;

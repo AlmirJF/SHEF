@@ -13,6 +13,7 @@ import java.awt.Stroke;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -30,6 +31,7 @@ import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.ComponentView;
 import javax.swing.text.Document;
 import javax.swing.text.Element;
@@ -376,6 +378,7 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit
             e.getComponent().repaint();
         }
         
+        @Override
         public void mouseReleased(MouseEvent e)
         {            
             mouseDown = false;
@@ -384,8 +387,8 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit
             {
                 Element elem = v.getElement();
                 SimpleAttributeSet sas = new SimpleAttributeSet(elem.getAttributes());
-                Integer w = new Integer(v.getSelectionBounds().width);
-                Integer h = new Integer(v.getSelectionBounds().height);
+                Integer w = v.getSelectionBounds().width;
+                Integer h = v.getSelectionBounds().height;
                 
                 if(elem.getName().equals("table"))//resize the table
                 {                   
@@ -505,7 +508,7 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit
             {
                 document.setOuterHTML(elem, html);                
             }
-            catch(Exception ex)
+            catch(IOException | BadLocationException ex)
             {
                 ex.printStackTrace();
             }
@@ -537,6 +540,7 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit
             super(delegate);        
         }
 
+        @Override
         public void paint(Graphics g, Shape allocation)
         {
             curBounds = new Rectangle(allocation.getBounds());
@@ -547,6 +551,7 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit
         /* (non-Javadoc)
          * @see javax.swing.text.View#insertUpdate(javax.swing.event.DocumentEvent, java.awt.Shape, javax.swing.text.ViewFactory)
          */
+        @Override
         public void insertUpdate(DocumentEvent e, Shape a, ViewFactory f)
         {
             setSelectionEnabled(false);    
@@ -556,6 +561,7 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit
         /* (non-Javadoc)
          * @see javax.swing.text.View#changedUpdate(javax.swing.event.DocumentEvent, java.awt.Shape, javax.swing.text.ViewFactory)
          */
+        @Override
         public void changedUpdate(DocumentEvent e, Shape a, ViewFactory f)
         {
             setSelectionEnabled(false); 
@@ -565,6 +571,7 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit
         /* (non-Javadoc)
          * @see javax.swing.text.View#removeUpdate(javax.swing.event.DocumentEvent, java.awt.Shape, javax.swing.text.ViewFactory)
          */
+        @Override
         public void removeUpdate(DocumentEvent e, Shape a, ViewFactory f)
         {
             setSelectionEnabled(false);            
@@ -635,8 +642,9 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit
             g.drawRect(selBounds.x, selBounds.y, selBounds.width, selBounds.height);
             
             Rectangle h[] = computeHandles(selBounds);
-            for(int i = 0; i < h.length; i++)        
-                g.fillRect(h[i].x, h[i].y, h[i].width, h[i].height);        
+            for (Rectangle h1 : h) {
+                g.fillRect(h1.x, h1.y, h1.width, h1.height);        
+            }
             g.setColor(cached);            
         }
         
@@ -780,6 +788,7 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit
             super(e);
         }
         
+        @Override
         protected Component createComponent() 
         {           
             JLabel p = new JLabel();
@@ -790,9 +799,9 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit
                 if(as != null) 
                 {
                     Object comment = as.getAttribute(HTML.Attribute.COMMENT);
-                    if (comment instanceof String) 
+                    if (comment instanceof String string) 
                     {
-                        p.setToolTipText((String)comment);
+                        p.setToolTipText(string);
                     }
                 }
             }

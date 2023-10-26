@@ -9,32 +9,12 @@
 <!-- in the project's Project Properties dialog box.-->
 <project name="SHEF" default="default" basedir=".">
     <description>Builds, tests, and runs the project SHEF.</description>
-    <import file="nbproject/build-impl.xml"/>
+    <import file="nbproject/build-impl.xml" />
 
 
-     <tstamp>  <format property="timestamp" pattern="yyyy-MM-dd" />  </tstamp>
-
-
-     
-	<target name="-post-jar">
-		<property name="store.jar.name" value="ShefComplete"/>
-		<property name="store.dir" value="dist"/>
-		<property name="store.jar" value="${store.dir}/${store.jar.name}.jar"/>
-		<echo message="Packaging ${application.title} into a single JAR at ${store.jar}"/>
-		<jar destfile="${store.dir}/temp_final.jar" filesetmanifest="skip">
-			<zipgroupfileset dir="dist" includes="*.jar"/>
-			<zipgroupfileset dir="dist/lib" includes="*.jar"/>
-			<manifest>
-				<attribute name="Main-Class" value="${main.class}"/>
-			</manifest>
-		</jar>
-		<zip destfile="${store.jar}">
-			<zipfileset src="${store.dir}/temp_final.jar"
-			excludes="META-INF/*.SF, META-INF/*.DSA, META-INF/*.RSA"/>
-		</zip>
-		<delete file="${store.dir}/temp_final.jar"/>
-	</target>
-
+    <tstamp>
+        <format property="timestamp" pattern="yyyy-MM-dd" />
+    </tstamp>
     <!--
 
     There exist several targets which are by default empty and which can be 
@@ -96,4 +76,39 @@
     nbproject/build-impl.xml file. 
 
     -->
+    <target name="-post-jar">
+
+        <!-- Change the value to the name of the final jar without .jar -->
+        <property name="store.jar.name" value="SHEF" />
+
+        <!-- don't edit below this line -->
+        <property name="store.dir" value="dist" />
+        <property name="temp.dir" value="temp" />
+        <property name="store.jar" value="${store.dir}/${store.jar.name}.jar" />
+
+        <echo message="Packaging ${application.title} into a single JAR at ${store.jar}" />
+
+        <delete dir="${temp.dir}" />
+        <mkdir dir="${temp.dir}" />
+
+        <jar destfile="${temp.dir}/temp_final.jar" filesetmanifest="skip">
+            <zipgroupfileset dir="dist" includes="*.jar" />
+            <zipgroupfileset dir="dist/lib" includes="*.jar" />
+
+            <manifest>
+                <attribute name="Main-Class" value="${main.class}" />
+            </manifest>
+        </jar>
+
+        <delete dir="${store.dir}" />
+
+        <zip destfile="${store.jar}">
+            <zipfileset src="${temp.dir}/temp_final.jar"
+                excludes="META-INF/*.SF, META-INF/*.DSA, META-INF/*.RSA" />
+        </zip>
+
+        <delete dir="${temp.dir}" />
+
+    </target>
+
 </project>

@@ -5,9 +5,11 @@
 package net.atlanticbb.tantlinger.ui.text.actions;
 
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 import javax.swing.JEditorPane;
 import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
@@ -20,184 +22,173 @@ import net.atlanticbb.tantlinger.ui.UIUtils;
 import net.atlanticbb.tantlinger.ui.text.CompoundUndoManager;
 import net.atlanticbb.tantlinger.ui.text.HTMLUtils;
 
-
 /**
  * Action which aligns HTML elements
- * 
+ *
  * @author Bob Tantlinger
  *
  */
-public class HTMLAlignAction extends HTMLTextEditAction
-{        
+public class HTMLAlignAction extends HTMLTextEditAction {
+
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
-    public static final int LEFT = 0;    
+    public static final int LEFT = 0;
     public static final int CENTER = 1;
     public static final int RIGHT = 2;
     public static final int JUSTIFY = 3;
-    
-    public static final String ALIGNMENT_NAMES[] =
-    {
-        i18n.str("left"),  
-        i18n.str("center"), 
-        i18n.str("right"), 
-        i18n.str("justify")
-    };
-    
-    private static final int[] MNEMS =
-    {
-        i18n.mnem("left"),
-        i18n.mnem("center"),
-        i18n.mnem("right"),
-        i18n.mnem("justify")
-    };
-    
-    public static final String ALIGNMENTS[] =
-    {
-        "left", "center", "right", "justify"
-    };
-    
-    private static final String IMGS[] =
-    {
-        "al_left.png",  "al_center.png", "al_right.png", "al_just.png"
-    };
-    
+
+    public static final String ALIGNMENT_NAMES[]
+            = {
+                i18n.str("left"),
+                i18n.str("center"),
+                i18n.str("right"),
+                i18n.str("justify")
+            };
+
+    private static final int[] MNEMS
+            = {
+                i18n.mnem("left"),
+                i18n.mnem("center"),
+                i18n.mnem("right"),
+                i18n.mnem("justify")
+            };
+
+    public static final String ALIGNMENTS[]
+            = {
+                "left", "center", "right", "justify"
+            };
+
+    private static final String IMGS[]
+            = {
+                "al_left.png", "al_center.png", "al_right.png", "al_just.png"
+            };
+
     private int align;
-        
-    
+
     /**
      * Creates a new HTMLAlignAction
+     *
      * @param al LEFT, RIGHT, CENTER, or JUSTIFY
      * @throws IllegalArgumentException
      */
-    public HTMLAlignAction(int al) throws IllegalArgumentException
-    {
+    public HTMLAlignAction(int al) throws IllegalArgumentException {
         super("");
-        if(al < 0 || al >= ALIGNMENTS.length)
+        if (al < 0 || al >= ALIGNMENTS.length) {
             throw new IllegalArgumentException("Illegal Argument");
-        
+        }
+
         //String pkg = getClass().getPackage().getName();
         putValue(NAME, (ALIGNMENT_NAMES[al]));
-        putValue(MNEMONIC_KEY, new Integer(MNEMS[al]));        
-        
+        putValue(MNEMONIC_KEY, MNEMS[al]);
+
         putValue(SMALL_ICON, UIUtils.getIcon(UIUtils.X16, IMGS[al]));
         putValue(ActionManager.BUTTON_TYPE, ActionManager.BUTTON_TYPE_VALUE_RADIO);
-        
+
         align = al;
     }
-    
-    protected void updateWysiwygContextState(JEditorPane ed)
-    {        
+
+    @Override
+    protected void updateWysiwygContextState(JEditorPane ed) {
         setSelected(shouldBeSelected(ed));
     }
-    
-    private boolean shouldBeSelected(JEditorPane ed)
-    {
-        HTMLDocument document = (HTMLDocument)ed.getDocument();        
+
+    private boolean shouldBeSelected(JEditorPane ed) {
+        HTMLDocument document = (HTMLDocument) ed.getDocument();
         Element elem = document.getParagraphElement(ed.getCaretPosition());
-        if(HTMLUtils.isImplied(elem))
+        if (HTMLUtils.isImplied(elem)) {
             elem = elem.getParentElement();
-        
+        }
+
         AttributeSet at = elem.getAttributes();
         return at.containsAttribute(HTML.Attribute.ALIGN, ALIGNMENTS[align]);
     }
-    
-    protected void updateSourceContextState(JEditorPane ed)
-    {
+
+    @Override
+    protected void updateSourceContextState(JEditorPane ed) {
         setSelected(false);
     }
-    
-    protected void wysiwygEditPerformed(ActionEvent e, JEditorPane editor)
-    {        
-        HTMLDocument doc = (HTMLDocument)editor.getDocument();        
+
+    @Override
+    protected void wysiwygEditPerformed(ActionEvent e, JEditorPane editor) {
+        HTMLDocument doc = (HTMLDocument) editor.getDocument();
         Element curE = doc.getParagraphElement(editor.getSelectionStart());
         Element endE = doc.getParagraphElement(editor.getSelectionEnd());
         //System.err.println("ALIGN " + curE.getName());
-        
-        CompoundUndoManager.beginCompoundEdit(doc);        
-        while(true)
-        {            
+
+        CompoundUndoManager.beginCompoundEdit(doc);
+        while (true) {
             alignElement(curE);
-            if(curE.getEndOffset() >= endE.getEndOffset()
-                || curE.getEndOffset() >= doc.getLength())
-                break;            
-            curE = doc.getParagraphElement(curE.getEndOffset() + 1);            
-        }        
-        CompoundUndoManager.endCompoundEdit(doc);        
+            if (curE.getEndOffset() >= endE.getEndOffset()
+                    || curE.getEndOffset() >= doc.getLength()) {
+                break;
+            }
+            curE = doc.getParagraphElement(curE.getEndOffset() + 1);
+        }
+        CompoundUndoManager.endCompoundEdit(doc);
     }
-    
-    private void alignElement(Element elem)
-    {
-        HTMLDocument doc = (HTMLDocument)elem.getDocument();
-        
-        if(HTMLUtils.isImplied(elem))
-        {           
+
+    private void alignElement(Element elem) {
+        HTMLDocument doc = (HTMLDocument) elem.getDocument();
+
+        if (HTMLUtils.isImplied(elem)) {
             HTML.Tag tag = HTML.getTag(elem.getParentElement().getName());
             //System.out.println(tag);
             //pre tag doesn't support an align attribute
             //http://www.w3.org/TR/REC-html32#pre
-            if(tag != null && (!tag.equals(HTML.Tag.BODY)) && 
-                (!tag.isPreformatted() && !tag.equals(HTML.Tag.DD)))
-            {
+            if (tag != null && (!tag.equals(HTML.Tag.BODY))
+                    && (!tag.isPreformatted() && !tag.equals(HTML.Tag.DD))) {
                 SimpleAttributeSet as = new SimpleAttributeSet(elem.getAttributes());
-                as.removeAttribute("align");                
+                as.removeAttribute("align");
                 as.addAttribute("align", ALIGNMENTS[align]);
-                
+
                 Element parent = elem.getParentElement();
                 String html = HTMLUtils.getElementHTML(elem, false);
-                html = HTMLUtils.createTag(tag, as, html);  
+                html = HTMLUtils.createTag(tag, as, html);
                 String snipet = "";
-                for(int i = 0; i < parent.getElementCount(); i++)
-                {
+                for (int i = 0; i < parent.getElementCount(); i++) {
                     Element el = parent.getElement(i);
-                    if(el == elem)
+                    if (el == elem) {
                         snipet += html;
-                    else
-                        snipet += HTMLUtils.getElementHTML(el, true);                    
-                }            
-                
-                try
-                {
-                    doc.setOuterHTML(parent, snipet);
+                    } else {
+                        snipet += HTMLUtils.getElementHTML(el, true);
+                    }
                 }
-                catch(Exception ex)
-                {
+
+                try {
+                    doc.setOuterHTML(parent, snipet);
+                } catch (IOException | BadLocationException ex) {
                     ex.printStackTrace();
-                }                
+                }
             }
-        }
-        else
-        {
+        } else {
             //Set the HTML attribute on the paragraph...
             MutableAttributeSet set = new SimpleAttributeSet(elem.getAttributes());
             set.removeAttribute(HTML.Attribute.ALIGN);
             set.addAttribute(HTML.Attribute.ALIGN, ALIGNMENTS[align]);
-             //Set the paragraph attributes...
+            //Set the paragraph attributes...
             int start = elem.getStartOffset();
             int length = elem.getEndOffset() - elem.getStartOffset();
             doc.setParagraphAttributes(start, length - 1, set, true);
         }
     }
-    
-    protected void sourceEditPerformed(ActionEvent e, JEditorPane editor)
-    {
+
+    @Override
+    protected void sourceEditPerformed(ActionEvent e, JEditorPane editor) {
         String prefix = "<p align=\"" + ALIGNMENTS[align] + "\">";
         String postfix = "</p>";
         String sel = editor.getSelectedText();
-        if(sel == null)
-        {
+        if (sel == null) {
             editor.replaceSelection(prefix + postfix);
-            
+
             int pos = editor.getCaretPosition() - postfix.length();
-            if(pos >= 0)
-            	editor.setCaretPosition(pos);                    		  
-        }
-        else
-        {
+            if (pos >= 0) {
+                editor.setCaretPosition(pos);
+            }
+        } else {
             sel = prefix + sel + postfix;
-            editor.replaceSelection(sel);                
+            editor.replaceSelection(sel);
         }
     }
 }

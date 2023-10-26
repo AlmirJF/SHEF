@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import net.atlanticbb.tantlinger.io.IOUtils;
 
 /**
@@ -56,14 +57,12 @@ public class Demo {
         try {
             UIManager.setLookAndFeel(
                     UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception ex) {
+        } catch (ClassNotFoundException | IllegalAccessException | 
+                InstantiationException | UnsupportedLookAndFeelException ex) {
         }
 
-        SwingUtilities.invokeAndWait(new Runnable() {
-
-            public void run() {
-                demo = new Demo();
-            }
+        SwingUtilities.invokeAndWait(() -> {
+            demo = new Demo();
         });
 
         do {

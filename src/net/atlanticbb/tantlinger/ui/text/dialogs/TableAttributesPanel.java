@@ -60,6 +60,7 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel
         updateComponentsFromAttribs();        
     }
     
+    @Override
     public void updateComponentsFromAttribs()
     {
         if(attribs.containsKey("width")) //$NON-NLS-1$
@@ -74,9 +75,9 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel
             
             try
             {
-                widthField.getModel().setValue(new Integer(w));
+                widthField.getModel().setValue(Integer.valueOf(w));
             }
-            catch(Exception ex)
+            catch(NumberFormatException ex)
             {
                 ex.printStackTrace();
             }            
@@ -106,10 +107,9 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel
             borderField.setEnabled(true);
             try
             {
-                borderField.getModel().setValue(
-                    new Integer(attribs.get("border").toString())); //$NON-NLS-1$
+                borderField.getModel().setValue(Integer.valueOf(attribs.get("border").toString())); //$NON-NLS-1$
             }
-            catch(Exception ex)
+            catch(NumberFormatException ex)
             {
                 ex.printStackTrace();
             }
@@ -126,10 +126,9 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel
             cellPaddingField.setEnabled(true);
             try
             {
-                cellPaddingField.getModel().setValue(
-                    new Integer(attribs.get("cellpadding").toString())); //$NON-NLS-1$
+                cellPaddingField.getModel().setValue(Integer.valueOf(attribs.get("cellpadding").toString())); //$NON-NLS-1$
             }
-            catch(Exception ex)
+            catch(NumberFormatException ex)
             {
                 ex.printStackTrace();
             }
@@ -146,10 +145,9 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel
             cellSpacingField.setEnabled(true);
             try
             {
-                cellSpacingField.getModel().setValue(
-                    new Integer(attribs.get("cellspacing").toString())); //$NON-NLS-1$
+                cellSpacingField.getModel().setValue(Integer.valueOf(attribs.get("cellspacing").toString())); //$NON-NLS-1$
             }
-            catch(Exception ex)
+            catch(NumberFormatException ex)
             {
                 ex.printStackTrace();
             }
@@ -171,6 +169,7 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel
         }
     }    
     
+    @Override
     public void updateAttribsFromComponents()
     {
         if(widthCB.isSelected())
@@ -224,7 +223,7 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel
                 widthCombo.setSelectedIndex(1);
             try
             {
-                widthField.getModel().setValue(new Integer(w));
+                widthField.getModel().setValue(Integer.valueOf(w));
             }
             catch(Exception ex)
             {
@@ -255,8 +254,7 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel
             borderCB.setSelected(true);
             try
             {
-                borderField.getModel().setValue(
-                    new Integer(attribs.get("border").toString())); //$NON-NLS-1$
+                borderField.getModel().setValue(Integer.valueOf(attribs.get("border").toString())); //$NON-NLS-1$
             }
             catch(Exception ex)
             {
@@ -274,10 +272,9 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel
             cellPaddingCB.setSelected(true);
             try
             {
-                cellPaddingField.getModel().setValue(
-                    new Integer(attribs.get("cellpadding").toString())); //$NON-NLS-1$
+                cellPaddingField.getModel().setValue(Integer.valueOf(attribs.get("cellpadding").toString())); //$NON-NLS-1$
             }
-            catch(Exception ex)
+            catch(NumberFormatException ex)
             {
                 ex.printStackTrace();
             }
@@ -293,10 +290,9 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel
             cellSpacingCB.setSelected(true);
             try
             {
-                cellSpacingField.getModel().setValue(
-                    new Integer(attribs.get("cellspacing").toString())); //$NON-NLS-1$
+                cellSpacingField.getModel().setValue(Integer.valueOf(attribs.get("cellspacing").toString())); //$NON-NLS-1$
             }
-            catch(Exception ex)
+            catch(NumberFormatException ex)
             {
                 ex.printStackTrace();
             }
@@ -441,13 +437,9 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel
         {
             widthCB = new JCheckBox();
             widthCB.setText(i18n.str("width"));             //$NON-NLS-1$
-            widthCB.addItemListener(new java.awt.event.ItemListener()
-            {
-                public void itemStateChanged(java.awt.event.ItemEvent e)
-                {
-                    widthField.setEnabled(widthCB.isSelected());
-                    widthCombo.setEnabled(widthCB.isSelected());
-                }
+            widthCB.addItemListener((java.awt.event.ItemEvent e) -> {
+                widthField.setEnabled(widthCB.isSelected());
+                widthCombo.setEnabled(widthCB.isSelected());
             });
         }
         return widthCB;
@@ -493,12 +485,8 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel
         {
             alignCB = new JCheckBox();
             alignCB.setText(i18n.str("align")); //$NON-NLS-1$
-            alignCB.addItemListener(new java.awt.event.ItemListener()
-            {
-                public void itemStateChanged(java.awt.event.ItemEvent e)
-                {
-                    alignCombo.setEnabled(alignCB.isSelected());
-                }
+            alignCB.addItemListener((java.awt.event.ItemEvent e) -> {
+                alignCombo.setEnabled(alignCB.isSelected());
             });
         }
         return alignCB;
@@ -515,12 +503,8 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel
         {
             cellSpacingCB = new JCheckBox();
             cellSpacingCB.setText(i18n.str("cellspacing")); //$NON-NLS-1$
-            cellSpacingCB.addItemListener(new java.awt.event.ItemListener()
-            {
-                public void itemStateChanged(java.awt.event.ItemEvent e)
-                {
-                    cellSpacingField.setEnabled(cellSpacingCB.isSelected());
-                }
+            cellSpacingCB.addItemListener((java.awt.event.ItemEvent e) -> {
+                cellSpacingField.setEnabled(cellSpacingCB.isSelected());
             });
         }
         return cellSpacingCB;
@@ -552,12 +536,8 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel
         {
             borderCB = new JCheckBox();
             borderCB.setText(i18n.str("border")); //$NON-NLS-1$
-            borderCB.addItemListener(new java.awt.event.ItemListener()
-            {
-                public void itemStateChanged(java.awt.event.ItemEvent e)
-                {
-                    borderField.setEnabled(borderCB.isSelected());
-                }
+            borderCB.addItemListener((java.awt.event.ItemEvent e) -> {
+                borderField.setEnabled(borderCB.isSelected());
             });
         }
         return borderCB;
@@ -589,12 +569,8 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel
         {
             cellPaddingCB = new JCheckBox();
             cellPaddingCB.setText(i18n.str("cellpadding")); //$NON-NLS-1$
-            cellPaddingCB.addItemListener(new java.awt.event.ItemListener()
-            {
-                public void itemStateChanged(java.awt.event.ItemEvent e)
-                {
-                    cellPaddingField.setEnabled(cellPaddingCB.isSelected());
-                }
+            cellPaddingCB.addItemListener((java.awt.event.ItemEvent e) -> {
+                cellPaddingField.setEnabled(cellPaddingCB.isSelected());
             });
         }
         return cellPaddingCB;

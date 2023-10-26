@@ -16,60 +16,51 @@ import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
-import org.bushe.swing.action.ShouldBeEnabledDelegate;
 
 /**
  * Action which clears inline text styles
- * 
+ *
  * @author Bob Tantlinger
  *
  */
-public class ClearStylesAction extends HTMLTextEditAction
-{    
+public class ClearStylesAction extends HTMLTextEditAction {
+
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
-    public ClearStylesAction()
-    {
+    public ClearStylesAction() {
         super(i18n.str("clear_styles"));
-        putValue(MNEMONIC_KEY, new Integer(i18n.mnem("clear_styles")));
+        putValue(MNEMONIC_KEY, Integer.valueOf(i18n.mnem("clear_styles")));
         putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("shift ctrl Y"));
-        
-        addShouldBeEnabledDelegate(new ShouldBeEnabledDelegate()
-        {
-            public boolean shouldBeEnabled(Action a)
-            {                          
-                return getEditMode() != SOURCE;
-            }
-        });
+
+        addShouldBeEnabledDelegate((Action a) -> getEditMode() != SOURCE);
     }
 
     /* (non-Javadoc)
      * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
      */
-    protected void wysiwygEditPerformed(ActionEvent e, JEditorPane editor)
-    {
-        HTMLDocument document = (HTMLDocument)editor.getDocument();
-        HTMLEditorKit kit = (HTMLEditorKit)editor.getEditorKit();
-        
+    @Override
+    protected void wysiwygEditPerformed(ActionEvent e, JEditorPane editor) {
+        HTMLDocument document = (HTMLDocument) editor.getDocument();
+        HTMLEditorKit kit = (HTMLEditorKit) editor.getEditorKit();
+
         //Element el = document.getCharacterElement(editor.getCaretPosition());
         MutableAttributeSet attrs = new SimpleAttributeSet();
         attrs.addAttribute(StyleConstants.NameAttribute, HTML.Tag.CONTENT);
-        
+
         //int cpos = editor.getCaretPosition();
         int selStart = editor.getSelectionStart();
-        int selEnd = editor.getSelectionEnd();        
-        
-        if(selEnd > selStart)
-        {
+        int selEnd = editor.getSelectionEnd();
+
+        if (selEnd > selStart) {
             document.setCharacterAttributes(selStart, selEnd - selStart, attrs, true);
         }
-        
+
         kit.getInputAttributes().removeAttributes(kit.getInputAttributes());
         kit.getInputAttributes().addAttributes(attrs);
-        
+
         /*//boolean shouldClearSel = false;
         if(editor.getSelectedText() == null)
         {
@@ -91,8 +82,8 @@ public class ClearStylesAction extends HTMLTextEditAction
     /* (non-Javadoc)
      * @see net.atlanticbb.tantlinger.ui.text.actions.HTMLTextEditAction#sourceEditPerformed(java.awt.event.ActionEvent, javax.swing.JEditorPane)
      */
-    protected void sourceEditPerformed(ActionEvent e, JEditorPane editor)
-    {
-        
-    }  
+    @Override
+    protected void sourceEditPerformed(ActionEvent e, JEditorPane editor) {
+
+    }
 }

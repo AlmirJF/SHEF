@@ -18,70 +18,65 @@ import javax.swing.text.StyledEditorKit;
 import net.atlanticbb.tantlinger.ui.UIUtils;
 import net.atlanticbb.tantlinger.ui.text.HTMLUtils;
 
-
 /**
  * Action which edits HTML font color
- * 
+ *
  * @author Bob Tantlinger
  *
  */
-public class HTMLFontColorAction extends HTMLTextEditAction
-{
-            
+public class HTMLFontColorAction extends HTMLTextEditAction {
+
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
-    public HTMLFontColorAction()
-    {
+    public HTMLFontColorAction() {
         super(i18n.str("color_"));
-        putValue(MNEMONIC_KEY, new Integer(i18n.mnem("color_")));
-        this.putValue(SMALL_ICON, UIUtils.getIcon(UIUtils.X16, "color.png"));        
+        putValue(MNEMONIC_KEY, Integer.valueOf(i18n.mnem("color_")));
+        this.putValue(SMALL_ICON, UIUtils.getIcon(UIUtils.X16, "color.png"));
     }
 
-    protected void sourceEditPerformed(ActionEvent e, JEditorPane editor)
-    {
+    @Override
+    protected void sourceEditPerformed(ActionEvent e, JEditorPane editor) {
         Color c = getColorFromUser(editor);
-        if(c == null)
+        if (c == null) {
             return;
-        
+        }
+
         String prefix = "<font color=" + HTMLUtils.colorToHex(c) + ">";
         String postfix = "</font>";
         String sel = editor.getSelectedText();
-        if(sel == null)
-        {
+        if (sel == null) {
             editor.replaceSelection(prefix + postfix);
-            
+
             int pos = editor.getCaretPosition() - postfix.length();
-            if(pos >= 0)
-            	editor.setCaretPosition(pos);                    		  
-        }
-        else
-        {
+            if (pos >= 0) {
+                editor.setCaretPosition(pos);
+            }
+        } else {
             sel = prefix + sel + postfix;
-            editor.replaceSelection(sel);                
+            editor.replaceSelection(sel);
         }
     }
 
-    protected void wysiwygEditPerformed(ActionEvent e, JEditorPane editor)
-    {
+    @Override
+    protected void wysiwygEditPerformed(ActionEvent e, JEditorPane editor) {
         Color color = getColorFromUser(editor);
-		if(color != null)
-		{
-		    Action a = new StyledEditorKit.ForegroundAction("Color", color);
-		    a.actionPerformed(e);
-		}
+        if (color != null) {
+            Action a = new StyledEditorKit.ForegroundAction("Color", color);
+            a.actionPerformed(e);
+        }
     }
-    
-    private Color getColorFromUser(Component c)
-    {	
+
+    private Color getColorFromUser(Component c) {
         Window win = SwingUtilities.getWindowAncestor(c);
-        if(win != null)
+        if (win != null) {
             c = win;
-        Color color = 
-			JColorChooser.showDialog(c, "Color", Color.black);	 //$NON-NLS-1$
-		return color;
+        }
+        Color color
+                = JColorChooser.showDialog(c, "Color", Color.black);	 //$NON-NLS-1$
+        return color;
     }
 
 }

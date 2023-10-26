@@ -42,7 +42,6 @@ import javax.swing.SwingConstants;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
@@ -150,7 +149,6 @@ public class HTMLEditorPane extends JPanel {
         setLayout(new BorderLayout());
         add(formatToolBar, BorderLayout.NORTH);
         add(tabs, BorderLayout.CENTER);
-
     }
 
     public void dispose() {

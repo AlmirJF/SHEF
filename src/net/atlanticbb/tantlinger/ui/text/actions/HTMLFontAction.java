@@ -44,6 +44,7 @@ public class HTMLFontAction extends HTMLTextEditAction
         super(i18n.str("font_"));         //$NON-NLS-1$
     }
 
+    @Override
     protected void sourceEditPerformed(ActionEvent e, JEditorPane editor)
     {
         HTMLFontDialog d = createDialog(editor);
@@ -56,6 +57,7 @@ public class HTMLFontAction extends HTMLTextEditAction
         }
     }
 
+    @Override
     protected void wysiwygEditPerformed(ActionEvent e, JEditorPane editor)
     {
         HTMLDocument doc = (HTMLDocument)editor.getDocument();
@@ -77,9 +79,8 @@ public class HTMLFontAction extends HTMLTextEditAction
             {
                 d.setFontSize(Integer.parseInt(o.toString()));
             }
-            catch(Exception ex)
+            catch(NumberFormatException ex)
             {
-                ex.printStackTrace();
             }
         }
         
@@ -89,10 +90,10 @@ public class HTMLFontAction extends HTMLTextEditAction
         {
             MutableAttributeSet tagAttrs = new SimpleAttributeSet();
             tagAttrs.addAttribute(StyleConstants.FontFamily, d.getFontName());
-            tagAttrs.addAttribute(StyleConstants.FontSize, new Integer(d.getFontSize()));
-            tagAttrs.addAttribute(StyleConstants.Bold, new Boolean(d.isBold()));
-            tagAttrs.addAttribute(StyleConstants.Italic, new Boolean(d.isItalic()));
-            tagAttrs.addAttribute(StyleConstants.Underline, new Boolean(d.isUnderline()));
+            tagAttrs.addAttribute(StyleConstants.FontSize, d.getFontSize());
+            tagAttrs.addAttribute(StyleConstants.Bold, d.isBold());
+            tagAttrs.addAttribute(StyleConstants.Italic, d.isItalic());
+            tagAttrs.addAttribute(StyleConstants.Underline, d.isUnderline());
             
             CompoundUndoManager.beginCompoundEdit(editor.getDocument());
             HTMLUtils.setCharacterAttributes(editor, tagAttrs);

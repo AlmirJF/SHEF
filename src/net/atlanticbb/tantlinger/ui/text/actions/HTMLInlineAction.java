@@ -26,246 +26,230 @@ import net.atlanticbb.tantlinger.ui.text.HTMLUtils;
 
 import org.bushe.swing.action.ActionManager;
 
-
-
 /**
  * Action which toggles inline HTML elements
- * 
+ *
  * @author Bob Tantlinger
  *
  */
-public class HTMLInlineAction extends HTMLTextEditAction
-{
+public class HTMLInlineAction extends HTMLTextEditAction {
+
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
-    
+
     public static final int EM = 0;
     public static final int STRONG = 1;
     public static final int CODE = 2;
     public static final int CITE = 3;
     public static final int SUP = 4;
-    public static final int SUB = 5;    
-    public static final int BOLD = 6;    
-    public static final int ITALIC = 7;    
-    public static final int UNDERLINE = 8;    
+    public static final int SUB = 5;
+    public static final int BOLD = 6;
+    public static final int ITALIC = 7;
+    public static final int UNDERLINE = 8;
     public static final int STRIKE = 9;
 
-    public static final String[] INLINE_TYPES = 
-    {        
-        i18n.str("emphasis"),
-        i18n.str("strong"),
-        i18n.str("code"),
-        i18n.str("cite"),
-        i18n.str("superscript"),
-        i18n.str("subscript"),        
-        i18n.str("bold"),
-        i18n.str("italic"),
-        i18n.str("underline"),
-        i18n.str("strikethrough")        
-    };
-    
-    private static final int[] MNEMS =
-    {
-        i18n.mnem("emphasis"),
-        i18n.mnem("strong"),
-        i18n.mnem("code"),
-        i18n.mnem("cite"),
-        i18n.mnem("superscript"),
-        i18n.mnem("subscript"),        
-        i18n.mnem("bold"),
-        i18n.mnem("italic"),
-        i18n.mnem("underline"),
-        i18n.mnem("strikethrough")
-    };
-    
+    public static final String[] INLINE_TYPES
+            = {
+                i18n.str("emphasis"),
+                i18n.str("strong"),
+                i18n.str("code"),
+                i18n.str("cite"),
+                i18n.str("superscript"),
+                i18n.str("subscript"),
+                i18n.str("bold"),
+                i18n.str("italic"),
+                i18n.str("underline"),
+                i18n.str("strikethrough")
+            };
+
+    private static final int[] MNEMS
+            = {
+                i18n.mnem("emphasis"),
+                i18n.mnem("strong"),
+                i18n.mnem("code"),
+                i18n.mnem("cite"),
+                i18n.mnem("superscript"),
+                i18n.mnem("subscript"),
+                i18n.mnem("bold"),
+                i18n.mnem("italic"),
+                i18n.mnem("underline"),
+                i18n.mnem("strikethrough")
+            };
+
     private int type;
 
     /**
      * Creates a new HTMLInlineAction
-     * 
+     *
      * @param itype an inline element type (BOLD, ITALIC, STRIKE, etc)
      * @throws IllegalArgumentException
      */
-    public HTMLInlineAction(int itype) throws IllegalArgumentException
-    {
+    public HTMLInlineAction(int itype) throws IllegalArgumentException {
         super("");
         type = itype;
-        if(type < 0 || type >= INLINE_TYPES.length)
+        if (type < 0 || type >= INLINE_TYPES.length) {
             throw new IllegalArgumentException("Illegal Argument");
+        }
         putValue(NAME, (INLINE_TYPES[type]));
-        putValue(MNEMONIC_KEY, new Integer(MNEMS[type]));
-        
+        putValue(MNEMONIC_KEY, MNEMS[type]);
+
         Icon ico = null;
         KeyStroke ks = null;
-        if(type == BOLD)
-        {
-            ico = UIUtils.getIcon(UIUtils.X16, "bold.png");
-            ks = KeyStroke.getKeyStroke(KeyEvent.VK_B, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
-        }
-        else if(type == ITALIC)
-        {
-            ico = UIUtils.getIcon(UIUtils.X16, "italic.png");
-            ks = KeyStroke.getKeyStroke(KeyEvent.VK_I, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
-        }
-        else if(type == UNDERLINE)
-        {
-            ico = UIUtils.getIcon(UIUtils.X16, "underline.png");
-            ks = KeyStroke.getKeyStroke(KeyEvent.VK_U, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+        switch (type) {
+            case BOLD -> {
+                ico = UIUtils.getIcon(UIUtils.X16, "bold.png");
+                ks = KeyStroke.getKeyStroke(KeyEvent.VK_B, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+            }
+            case ITALIC -> {
+                ico = UIUtils.getIcon(UIUtils.X16, "italic.png");
+                ks = KeyStroke.getKeyStroke(KeyEvent.VK_I, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+            }
+            case UNDERLINE -> {
+                ico = UIUtils.getIcon(UIUtils.X16, "underline.png");
+                ks = KeyStroke.getKeyStroke(KeyEvent.VK_U, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+            }
+            default -> {
+            }
         }
         putValue(SMALL_ICON, ico);
         putValue(ACCELERATOR_KEY, ks);
         putValue(ActionManager.BUTTON_TYPE, ActionManager.BUTTON_TYPE_VALUE_CHECKBOX);
         putValue(Action.SHORT_DESCRIPTION, getValue(Action.NAME));
     }
-    
-    protected void updateWysiwygContextState(JEditorPane ed)
-    {        
+
+    @Override
+    protected void updateWysiwygContextState(JEditorPane ed) {
         setSelected(isDefined(HTMLUtils.getCharacterAttributes(ed)));
     }
 
-    protected void sourceEditPerformed(ActionEvent e, JEditorPane editor)
-    {
+    protected void sourceEditPerformed(ActionEvent e, JEditorPane editor) {
         HTML.Tag tag = getTag();
         String prefix = "<" + tag.toString() + ">";
         String postfix = "</" + tag.toString() + ">";
         String sel = editor.getSelectedText();
-        if(sel == null)
-        {
+        if (sel == null) {
             editor.replaceSelection(prefix + postfix);
-            
+
             int pos = editor.getCaretPosition() - postfix.length();
-            if(pos >= 0)
-            	editor.setCaretPosition(pos);                    		  
-        }
-        else
-        {
+            if (pos >= 0) {
+                editor.setCaretPosition(pos);
+            }
+        } else {
             sel = prefix + sel + postfix;
-            editor.replaceSelection(sel);                
+            editor.replaceSelection(sel);
         }
     }
 
-    public HTML.Tag getTag()
-    {
+    public HTML.Tag getTag() {
         return getTagForType(type);
     }
-    
-    private HTML.Tag getTagForType(int type)
-    {
+
+    private HTML.Tag getTagForType(int type) {
         HTML.Tag tag = null;
-        
-        switch(type)
-        {
-            case EM:
+
+        switch (type) {
+            case EM ->
                 tag = HTML.Tag.EM;
-                break;
-            case STRONG:
+            case STRONG ->
                 tag = HTML.Tag.STRONG;
-                break;
-            case CODE:
+            case CODE ->
                 tag = HTML.Tag.CODE;
-                break;
-            case SUP:
+            case SUP ->
                 tag = HTML.Tag.SUP;
-                break;
-            case SUB:
+            case SUB ->
                 tag = HTML.Tag.SUB;
-                break;
-            case CITE:
+            case CITE ->
                 tag = HTML.Tag.CITE;
-                break;
-            case BOLD:
+            case BOLD ->
                 tag = HTML.Tag.B;
-                break;
-            case ITALIC:
+            case ITALIC ->
                 tag = HTML.Tag.I;
-                break;
-            case UNDERLINE:
+            case UNDERLINE ->
                 tag = HTML.Tag.U;
-                break;
-            case STRIKE:
+            case STRIKE ->
                 tag = HTML.Tag.STRIKE;
-                break;                
         }
         return tag;
     }
-    
-    protected void wysiwygEditPerformed(ActionEvent e, JEditorPane editor)
-    {        
+
+    @Override
+    protected void wysiwygEditPerformed(ActionEvent e, JEditorPane editor) {
         CompoundUndoManager.beginCompoundEdit(editor.getDocument());
-        toggleStyle(editor); 
+        toggleStyle(editor);
         CompoundUndoManager.endCompoundEdit(editor.getDocument());
-                        
+
         //HTMLUtils.printAttribs(HTMLUtils.getCharacterAttributes(editor));        
     }
-    
-    
-    private boolean isDefined(AttributeSet attr)
-    {
+
+    private boolean isDefined(AttributeSet attr) {
         boolean hasSC = false;
-        if(type == SUP)
-            hasSC = StyleConstants.isSuperscript(attr);
-        else if(type == SUB)
-            hasSC = StyleConstants.isSubscript(attr);
-        else if(type == BOLD)
-            hasSC = StyleConstants.isBold(attr);
-        else if(type == ITALIC)
-            hasSC = StyleConstants.isItalic(attr);
-        else if(type == UNDERLINE)
-            hasSC = StyleConstants.isUnderline(attr);
-        else if(type == STRIKE)
-            hasSC = StyleConstants.isStrikeThrough(attr);
-        
-        return hasSC || (attr.getAttribute(getTag()) != null);        
+        switch (type) {
+            case SUP ->
+                hasSC = StyleConstants.isSuperscript(attr);
+            case SUB ->
+                hasSC = StyleConstants.isSubscript(attr);
+            case BOLD ->
+                hasSC = StyleConstants.isBold(attr);
+            case ITALIC ->
+                hasSC = StyleConstants.isItalic(attr);
+            case UNDERLINE ->
+                hasSC = StyleConstants.isUnderline(attr);
+            case STRIKE ->
+                hasSC = StyleConstants.isStrikeThrough(attr);
+            default -> {
+            }
+        }
+
+        return hasSC || (attr.getAttribute(getTag()) != null);
     }
-    
-    private void toggleStyle(JEditorPane editor)
-    {
+
+    private void toggleStyle(JEditorPane editor) {
         MutableAttributeSet attr = new SimpleAttributeSet();
         attr.addAttributes(HTMLUtils.getCharacterAttributes(editor));
         boolean enable = !isDefined(attr);
         HTML.Tag tag = getTag();
-                
-        if(enable)
-        {             
+
+        if (enable) {
             //System.err.println("adding style");
-            attr = new SimpleAttributeSet();            
-            attr.addAttribute(tag, new SimpleAttributeSet());                 
+            attr = new SimpleAttributeSet();
+            attr.addAttribute(tag, new SimpleAttributeSet());
             //doesn't replace any attribs, just adds the new one
             HTMLUtils.setCharacterAttributes(editor, attr);
-        }
-        else
-        {
+        } else {
             //System.err.println("clearing style");
             //Kind of a ham-fisted way to do this, but sometimes there are
             //CSS attributes, someties there are HTML.Tag attributes, and sometimes
             //there are both. So, we have to remove 'em all to make sure this type
             //gets completely disabled
-            
             //remove the CSS style
-            //STRONG, EM, CITE, CODE have no CSS analogs  
-            if(type == BOLD)
-                HTMLUtils.removeCharacterAttribute(editor, CSS.Attribute.FONT_WEIGHT, "bold");
-            else if(type == ITALIC)
-                HTMLUtils.removeCharacterAttribute(editor, CSS.Attribute.FONT_STYLE, "italic");
-            else if(type == UNDERLINE)
-                HTMLUtils.removeCharacterAttribute(editor, CSS.Attribute.TEXT_DECORATION, "underline");
-            else if(type == STRIKE)
-                HTMLUtils.removeCharacterAttribute(editor, CSS.Attribute.TEXT_DECORATION, "line-through");
-            else if(type == SUP)
-                HTMLUtils.removeCharacterAttribute(editor, CSS.Attribute.VERTICAL_ALIGN, "sup");
-            else if(type == SUB)
-                HTMLUtils.removeCharacterAttribute(editor, CSS.Attribute.VERTICAL_ALIGN, "sub");
-                        
+            //STRONG, EM, CITE, CODE have no CSS analogs
+            switch (type) {
+                case BOLD ->
+                    HTMLUtils.removeCharacterAttribute(editor, CSS.Attribute.FONT_WEIGHT, "bold");
+                case ITALIC ->
+                    HTMLUtils.removeCharacterAttribute(editor, CSS.Attribute.FONT_STYLE, "italic");
+                case UNDERLINE ->
+                    HTMLUtils.removeCharacterAttribute(editor, CSS.Attribute.TEXT_DECORATION, "underline");
+                case STRIKE ->
+                    HTMLUtils.removeCharacterAttribute(editor, CSS.Attribute.TEXT_DECORATION, "line-through");
+                case SUP ->
+                    HTMLUtils.removeCharacterAttribute(editor, CSS.Attribute.VERTICAL_ALIGN, "sup");
+                case SUB ->
+                    HTMLUtils.removeCharacterAttribute(editor, CSS.Attribute.VERTICAL_ALIGN, "sub");
+                default -> {
+                }
+            }
+
             HTMLUtils.removeCharacterAttribute(editor, tag); //make certain the tag is also removed
         }
-        
+
         setSelected(enable);
-    }    
-        
-    protected void updateSourceContextState(JEditorPane ed)
-    {
+    }
+
+    @Override
+    protected void updateSourceContextState(JEditorPane ed) {
         setSelected(false);
     }
 }
