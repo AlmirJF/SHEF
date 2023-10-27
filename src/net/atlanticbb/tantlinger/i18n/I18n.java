@@ -10,7 +10,6 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -20,18 +19,17 @@ import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 
 /**
- * @author Bob Tantlinger
- *
+ * Class for internationalization.
  */
 public class I18n {
 
-    private static final File LANG_PACK_DIR = new File(System.getProperty("user.dir"), "languages");
+    private static final File LANGUAGE_PACK_DIR = new File(System.getProperty("user.dir"), "languages");
     private static final String DEFAULT_BUNDLE_NAME = "messages";
 
     private static final String MNEM_POSTFIX = ".mnemonic";
 
     public static final Properties BUNDLE_PROPS = new Properties();
-    public static final Map I18NS = new HashMap();
+    public static final Map<String, I18n> I18NS = new HashMap<>();
 
     public static Locale locale = Locale.getDefault();
 
@@ -89,30 +87,25 @@ public class I18n {
                     urls[i] = packs[i].toURL();
                 }
                 return ResourceBundle.getBundle(bun, loc, URLClassLoader.newInstance(urls));
-            } catch (MalformedURLException muex) {
-
-            } catch (MissingResourceException rex) {
+            } catch (MalformedURLException | MissingResourceException muex) {
 
             }
         }
-
         return ResourceBundle.getBundle(bun, loc); //just return default
     }
 
     public static I18n getInstance(String _package) {
-        I18n i18n = (I18n) I18NS.get(_package);
+        I18n i18n = I18NS.get(_package);
         if (i18n == null) {
             i18n = new I18n(_package);
             I18NS.put(_package, i18n);
         }
-
         return i18n;
     }
 
     public static void setLocale(Locale loc) {
         locale = loc;
-        for (Iterator it = I18NS.values().iterator(); it.hasNext();) {
-            I18n i18n = (I18n) it.next();
+        for (I18n i18n : I18NS.values()) {
             i18n.bundle = null; //reset so bundle with new locale gets created...
         }
     }
@@ -127,17 +120,11 @@ public class I18n {
 
     public static Locale getLocale() {
         if (locale == null) {
-            Locale.getDefault();
+            locale = Locale.getDefault();
         }
         return locale;
     }
 
-    /**
-     * Converts slashes to dots in a pathname
-     *
-     * @param path
-     * @return
-     */
     private static String slashesToDots(String path) {
         StringBuilder sb = new StringBuilder();
         StringTokenizer st = new StringTokenizer(path, "/");
@@ -169,7 +156,7 @@ public class I18n {
             BUNDLE_PROPS.setProperty(_package, bundle);
         }
 
-        I18n i18n = (I18n) I18NS.get(_package);
+        I18n i18n = I18NS.get(_package);
         if (i18n != null) {
             i18n.bundle = null; //reset to null so the bundle is recreated for the new name
         }
@@ -186,26 +173,26 @@ public class I18n {
     }
 
     public static File getLanguagePackDirectory() {
-        return LANG_PACK_DIR;
+        return LANGUAGE_PACK_DIR;
     }
 
     public static File[] getAvailableLanguagePacks() {
         Locale[] locs = getAvailableLanguagePackLocales();
-        List packs = new ArrayList();
+        List<File> packs = new ArrayList();
 
         for (Locale loc : locs) {
             String name = loc.toString() + ".zip";
-            File f = new File(LANG_PACK_DIR, name);
+            File f = new File(LANGUAGE_PACK_DIR, name);
             if (f.isFile() && f.canRead()) {
                 packs.add(f);
             }
         }
 
-        return (File[]) packs.toArray(File[]::new);
+        return packs.toArray(File[]::new);
     }
 
     public static Locale[] getAvailableLanguagePackLocales() {
-        List locs = new ArrayList();
+        List<Locale> locs = new ArrayList();
         File dir = getLanguagePackDirectory();
         if (dir.isDirectory() && dir.canRead()) {
             File[] packs = dir.listFiles(new ZipFileFilter());
@@ -224,7 +211,7 @@ public class I18n {
             }
         }
 
-        return (Locale[]) locs.toArray(Locale[]::new);
+        return locs.toArray(Locale[]::new);
     }
 
     public static Locale localeFromString(String locStr) {
@@ -232,8 +219,8 @@ public class I18n {
         if (parts.length > 0 || parts.length <= 3) {
             String lang = parts[0];
             String country = (parts.length > 1) ? parts[1] : "";
-            String varient = (parts.length > 2) ? parts[2] : "";
-            return new Locale(lang, country, varient);
+            String variant = (parts.length > 2) ? parts[2] : "";
+            return new Locale(lang, country, variant);
         }
 
         return null;

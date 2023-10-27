@@ -1,8 +1,13 @@
 package net.atlanticbb.tantlinger.shef;
 
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ContainerAdapter;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Locale;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.SwingUtilities;
@@ -31,6 +36,8 @@ public class Demo {
             IOUtils.close(in);
         }
 
+        editor.setText(String.valueOf(Locale.getDefault()));
+
         frame = new JFrame();
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(editor.getEditMenu());
@@ -39,38 +46,34 @@ public class Demo {
         frame.setJMenuBar(menuBar);
 
         frame.setTitle("HTML Editor Demo");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
         frame.getContentPane().add(editor);
         frame.setVisible(true);
 
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                printHtml();
+            }
+        });
     }
 
     private void printHtml() {
         System.out.println(editor.getText());
     }
 
-    private static Demo demo;
-
     public static void main(String args[]) throws InterruptedException, InvocationTargetException {
 
         try {
             UIManager.setLookAndFeel(
                     UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | IllegalAccessException | 
-                InstantiationException | UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | IllegalAccessException
+                | InstantiationException | UnsupportedLookAndFeelException ex) {
         }
 
         SwingUtilities.invokeAndWait(() -> {
-            demo = new Demo();
+            Demo demo = new Demo();
         });
-
-        do {
-            Thread.sleep(2000);
-
-        } while (demo.frame.isVisible());
-
-        demo.printHtml();
-
     }
 }
