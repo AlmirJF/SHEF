@@ -19,7 +19,7 @@ import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 
 /**
- * Class for internationalization.
+ * Class for internationalization. teste
  */
 public class I18n {
 
