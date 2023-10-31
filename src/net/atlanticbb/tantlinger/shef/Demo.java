@@ -1,7 +1,5 @@
 package net.atlanticbb.tantlinger.shef;
 
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ContainerAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
